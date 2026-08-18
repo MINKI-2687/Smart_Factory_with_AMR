@@ -35,6 +35,15 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 <a id="demo"></a>
 ## 🎬 시스템 시연 (Demonstration)
 
+### 🌟 전체 시스템 통합 시연 (Full System Demo)
+<p align="center">
+  <img src="docs/images/full_system_demo.gif" width="95%" alt="Full System Logistics Demo">
+</p>
+
+<br>
+
+### 🔍 서브시스템별 동작 시연
+
 | 🚗 자율주행 셔틀 (AMR) | 📷 FPGA 영상처리 & 도형 인식 |
 |:---:|:---:|
 | <img src="docs/images/amr_shuttle_demo.gif" width="100%" alt="AMR Shuttle"> | <img src="docs/images/fpga_shape_detect_demo.gif" width="100%" alt="FPGA Shape Tracking"> |
@@ -252,10 +261,6 @@ graph TB
 
 <a id="protocol"></a>
 ## 📡 통신 프로토콜
-
-<p align="center">
-  <img src="docs/images/protocol_diagram.png" alt="Communication Protocol" width="80%">
-</p>
 
 ### FPGA → Jetson (8바이트, 115200 8-N-1)
 ```

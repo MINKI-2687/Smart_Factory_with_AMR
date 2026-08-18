@@ -87,3 +87,6 @@ fail_log.txt
 *.zip
 *.pptx
 
+
+scratch/
+
