@@ -3,6 +3,10 @@
 > **Raspberry Pi + RPLidar C1 + FPGA 모터보드** 기반의 자율주행 셔틀 시스템  
 > LiDAR 스캔매칭 위치추정 → A* 경로계획 → PID 추종 → 슬롯 정렬/주차를 수행합니다.
 
+<p align="center">
+  <img src="../docs/images/amr_shuttle_demo.gif" alt="AMR Shuttle Demo" width="70%">
+</p>
+
 ---
 
 ## ⚡ 빠른 시작 (Quick Start)

@@ -3,6 +3,10 @@
 > **Jetson Orin Nano** 기반의 적재함 상태 실시간 AI 추론 및 시스템 통합 디스패처  
 > TensorRT 기반 9슬롯 모니터링 → FPGA 물체 좌표 수신 → OpenRB 로봇팔 명령 전송을 총괄합니다.
 
+<p align="center">
+  <img src="../docs/images/ai_rack_monitor_demo.gif" alt="AI Rack Monitor Demo" width="70%">
+</p>
+
 ---
 
 ## ⚡ 빠른 시작 (Execution)
@@ -37,6 +41,10 @@
 ---
 
 ## 📊 AI 모델 및 슬롯 판정 규칙
+
+<p align="center">
+  <img src="../docs/images/ai_rack_roi_cnn.png" alt="AI 3x3 ROI" width="60%">
+</p>
 
 - **AI 모델**: MobileNetV3-Small (TensorRT FP16 최적화)
 - **판정 기준**: 

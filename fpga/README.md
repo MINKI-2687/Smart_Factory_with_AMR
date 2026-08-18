@@ -2,6 +2,10 @@
 
 > **Zybo Z7-20** 보드를 활용한 2가지 하드웨어 서브시스템
 
+<p align="center">
+  <img src="../docs/images/fpga_shape_detect_demo.gif" alt="FPGA Shape Tracking Demo" width="60%">
+</p>
+
 ---
 
 ## 📂 서브모듈 안내
@@ -14,6 +18,10 @@
 ---
 
 ## 🚗 Motor Control (`motor-control/`)
+
+<p align="center">
+  <img src="../docs/images/motor_control_flow.png" alt="Motor Control Flow" width="75%">
+</p>
 
 라즈베리파이 주행 제어기와 UART로 통신하며 양쪽 바퀴 모터를 구동하고 휠 엔코더를 계측합니다.
 

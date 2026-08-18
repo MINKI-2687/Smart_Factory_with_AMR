@@ -82,6 +82,8 @@ fail_log.txt
 *.log
 
 # ===========================
-# Misc
+# Misc & Large Presentation Files (>100MB)
 # ===========================
 *.zip
+*.pptx
+
