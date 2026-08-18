@@ -35,23 +35,14 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 <a id="demo"></a>
 ## 🎬 시스템 시연 (Demonstration)
 
-### 🌟 전체 시스템 통합 시연 (Full System Demo)
-<p align="center">
-  <img src="docs/images/full_system_demo.gif" width="95%" alt="Full System Logistics Demo">
-</p>
-
-<br>
-
-### 🔍 서브시스템별 동작 시연
-
 | 🚗 자율주행 셔틀 (AMR) | 📷 FPGA 영상처리 & 도형 인식 |
 |:---:|:---:|
 | <img src="docs/images/amr_shuttle_demo.gif" width="100%" alt="AMR Shuttle"> | <img src="docs/images/fpga_shape_detect_demo.gif" width="100%" alt="FPGA Shape Tracking"> |
 | **LiDAR SLAM 기반 주행 및 슬롯 도킹** | **Pcam 5C 기반 실시간 HSV 추적 & 도형 판별** |
 
-| 🧠 Jetson AI 적재함 모니터링 | 🦾 로봇팔 물류 파지 및 슬롯 적재 |
+| 🧠 Jetson AI 적재함 모니터링 | 🦾 로봇팔 물류 파지 및 슬롯 적재 (통합 시연) |
 |:---:|:---:|
-| <img src="docs/images/ai_rack_monitor_demo.gif" width="100%" alt="AI Rack Monitor"> | <img src="docs/images/robot_arm_demo.gif" width="100%" alt="Robot Arm"> |
+| <img src="docs/images/ai_rack_monitor_demo.gif" width="100%" alt="AI Rack Monitor"> | <img src="docs/images/full_system_demo.gif" width="100%" alt="Robot Arm Full Integration Demo"> |
 | **MobileNetV3 (TensorRT FP16) 9슬롯 모니터링** | **OpenRB-150 기반 IK 역기구학 픽앤플레이스** |
 
 ---
@@ -77,65 +68,6 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 <p align="center">
   <img src="docs/images/system_architecture.png" alt="System Architecture" width="90%">
 </p>
-
-```mermaid
-graph TB
-    subgraph SHUTTLE["🚗 자율주행 셔틀 (Raspberry Pi)"]
-        LIDAR["RPLidar C1"]
-        SLAM["LiDAR SLAM<br/>스캔매칭 위치추정"]
-        ASTAR["A* 경로계획"]
-        PID["PID 추종"]
-        SLOT["슬롯 정렬/진입/착석"]
-    end
-
-    subgraph FPGA_VISION["📷 FPGA 영상처리 (Zybo Z7-20)"]
-        PCAM["Pcam 5C"]
-        HSV["HSV 물체 추적<br/>(도형·색상 분류)"]
-        SR04["SR04 초음파<br/>안전 가드"]
-        VITIS["Vitis PS<br/>(ARM Cortex-A9)"]
-    end
-
-    subgraph FPGA_MOTOR["⚡ FPGA 모터 제어 (Zybo Z7-20)"]
-        MOTOR_CTRL["PWM 모터 제어"]
-        ENCODER["엔코더 피드백"]
-        WATCHDOG["와치독 타이머"]
-    end
-
-    subgraph JETSON["🧠 Jetson AI (Orin Nano)"]
-        CAM["Logitech C270"]
-        TRT["MobileNetV3-Small<br/>TensorRT FP16"]
-        MONITOR["적재함 모니터링<br/>(9슬롯 EMPTY/OCCUPIED)"]
-        DISPATCH["통합 디스패치<br/>컨트롤러"]
-        WEB["웹 UI :8080"]
-    end
-
-    subgraph ARM["🦾 로봇팔 (OpenRB-150)"]
-        DXL["Dynamixel 서보"]
-        IK["역기구학(IK)<br/>좌표→관절각"]
-        GRIPPER["그리퍼<br/>집기/놓기"]
-    end
-
-    LIDAR --> SLAM --> ASTAR --> PID --> SLOT
-    PID -.->|UART| FPGA_MOTOR
-    FPGA_MOTOR -.->|엔코더 데이터| SHUTTLE
-
-    PCAM --> HSV --> VITIS
-    SR04 --> VITIS
-    VITIS -->|"UART 8B<br/>도형+좌표"| DISPATCH
-
-    CAM --> TRT --> MONITOR --> DISPATCH
-    DISPATCH -->|"UART 9B<br/>좌표+슬롯"| ARM
-    ARM -->|"UART 5B<br/>ACK/DONE"| DISPATCH
-    MONITOR --> WEB
-
-    IK --> DXL --> GRIPPER
-
-    style SHUTTLE fill:#2ecc71,color:#fff
-    style FPGA_VISION fill:#3498db,color:#fff
-    style FPGA_MOTOR fill:#e67e22,color:#fff
-    style JETSON fill:#9b59b6,color:#fff
-    style ARM fill:#e74c3c,color:#fff
-```
 
 ---
 
@@ -196,6 +128,8 @@ graph TB
 | **기능** | Jetson 좌표 수신 → 역기구학 보간 → 물체 집기 → 빈 슬롯 적재 |
 | **특징** | 삼각형 보간 좌표 보정, 관절공간 선형보간, settle 안정 판정, RETRY 복구 |
 
+👉 자세한 내용: [`arduino/README.md`](arduino/README.md)
+
 ---
 
 <a id="structure"></a>
@@ -232,8 +166,8 @@ graph TB
 │       └── sim/                 #     테스트벤치 5개
 │
 ├── arduino/                     # 로봇팔 제어 (OpenRB-150)
-│   └── openrb_robot_arm/
-│       └── openrb_robot_arm.ino #   좌표 수신 → IK → 집기/적재
+│   ├── openrb_robot_arm/        #   스케치 소스 (.ino)
+│   └── README.md                #   제어 알고리즘 & 통신 프로토콜 설명
 │
 └── docs/                        # 프로젝트 문서 & 시연 자료
     ├── Smart_Factory_with_AMR.pptx  # 팀 프로젝트 발표 PPT
@@ -290,7 +224,7 @@ graph TB
 
 ### 1. 조명 민감도 및 도형 인식 오류 개선
 <p align="center">
-  <img src="docs/images/troubleshoot_shape_detect.png" alt="Troubleshooting Shape Detection" width="85%">
+  <img src="docs/images/troubleshoot_shape_detect_clean.png" alt="Troubleshooting Shape Detection Clean" width="70%">
 </p>
 
 - **문제점**: 주변 조명 변화에 따라 단순 RGB 임계값 방식에서 도형 오인식 및 경계 검출 실패 발생.
@@ -332,14 +266,24 @@ make run      # 실시간 live_view.py UI와 함께 실행
 
 ### 2. Jetson AI 비전 & 통합 제어 (Orin Nano)
 ```bash
-cd jetson/
-
 # [Terminal 1] 실시간 적재함 비전 모니터링 & 웹 UI (:8080)
-./start_vision.sh --max-allowed-shift 24 --minimum-alignment-score 0.25
+cd /home/aidl/work/robot_rack_project_20260811
+./start_vision.sh \
+  --max-allowed-shift 24 \
+  --minimum-alignment-score 0.25 \
+  --alignment-interval 0.5 \
+  --occupied-threshold 0.98
 
 # [Terminal 2] FPGA - OpenRB 통합 디스패처
-./start_controller.sh --fpga-port /dev/ttyUSB1 --openrb-port /dev/ttyUSB0
+cd /home/aidl/work/robot_rack_project_20260811
+./start_controller.sh \
+  --fpga-port /dev/ttyUSB1 \
+  --openrb-port /dev/ttyUSB0 \
+  --openrb-done-timeout 60
 ```
+
+### 3. 로봇팔 제어 (OpenRB-150)
+- Arduino IDE에서 `arduino/openrb_robot_arm/openrb_robot_arm.ino` 열기 ➔ 보드 `OpenRB-150` 선택 후 업로드. (상세 안내: [`arduino/README.md`](arduino/README.md))
 
 ---
 

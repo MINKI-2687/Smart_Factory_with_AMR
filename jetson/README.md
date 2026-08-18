@@ -14,11 +14,20 @@
 터미널 2개를 열어 각각 실행합니다:
 
 ```bash
-# [Terminal 1] 카메라 정렬 & AI 적재함 모니터링 (Web UI :8080)
-./start_vision.sh --max-allowed-shift 24 --minimum-alignment-score 0.25
+# [Terminal 1] 실시간 적재함 비전 모니터링 & 웹 UI (:8080)
+cd /home/aidl/work/robot_rack_project_20260811
+./start_vision.sh \
+  --max-allowed-shift 24 \
+  --minimum-alignment-score 0.25 \
+  --alignment-interval 0.5 \
+  --occupied-threshold 0.98
 
 # [Terminal 2] FPGA - OpenRB 통합 디스패치 컨트롤러
-./start_controller.sh --fpga-port /dev/ttyUSB1 --openrb-port /dev/ttyUSB0
+cd /home/aidl/work/robot_rack_project_20260811
+./start_controller.sh \
+  --fpga-port /dev/ttyUSB1 \
+  --openrb-port /dev/ttyUSB0 \
+  --openrb-done-timeout 60
 
 # (옵션) 환경 점검 및 단위 검증
 ./preflight.sh     # 하드웨어/패키지 사전 점검
