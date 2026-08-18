@@ -1,0 +1,90 @@
+flowchart LR
+    subgraph INPUT["CAMERA INPUT"]
+        PCAM["Pcam 5C<br/>OV5640 Image Sensor"]
+    end
+
+    subgraph PL_CAPTURE["PL: DIGILENT PCAM PIPELINE"]
+        DPHY["MIPI D-PHY RX<br/>Electrical Signal Receiver"]
+        CSI["MIPI CSI-2 RX<br/>Packet and Pixel Decoder"]
+        BAYER["AXI BayerToRGB<br/>Bayer to RGB Conversion"]
+        GAMMA["AXI Gamma Correction<br/>Brightness Correction"]
+    end
+
+    subgraph MEMORY["PS DDR FRAME BUFFER"]
+        S2MM["AXI VDMA S2MM<br/>Stream to Memory"]
+        DDR["DDR Triple Frame Buffer"]
+        MM2S["AXI VDMA MM2S<br/>Memory to Stream"]
+    end
+
+    subgraph CUSTOM_VIDEO["PL: CUSTOM BLUE OBJECT TRACKER"]
+        WRAPPER["basic_pcam_1080_axis<br/>AXI4-Stream Wrapper"]
+        HSV["basic_rgb_hsv_blue_classifier<br/>RGB to HSV Blue Decision"]
+        TRACKER["basic_axis_blue_tracker_1080<br/>Runs, Bounding Boxes, 6 Objects"]
+        STABLE["Coordinate Stabilizer<br/>3 Frames / 24 Pixel Tolerance"]
+        PACK["coord_word Packer<br/>X, Y, Valid, Count, Index, Stable"]
+        OVERLAY["Bounding Box and OSD Overlay"]
+    end
+
+    subgraph DISPLAY["PL: HDMI OUTPUT"]
+        VOUT["AXI4-Stream to Video Out"]
+        VTG["Video Timing Controller"]
+        DVI["rgb2dvi"]
+        HDMI["HDMI Monitor"]
+    end
+
+    subgraph COORDINATE["PL TO PS COORDINATE PATH"]
+        CGPIO["AXI GPIO<br/>Coordinate Register 0x41200000"]
+        PS["Zynq Processing System 7<br/>ARM Cortex-A9"]
+    end
+
+    subgraph CAR_GUARD["PL: RC CAR PRESENCE GUARD"]
+        SR04["HC-SR04 Sensor"]
+        GUARD["basic_sr04_guard<br/>Trigger, Echo Timer, Filter"]
+        SGPIO["AXI GPIO<br/>SR04 Status Word"]
+    end
+
+    subgraph SOFTWARE["PS: VITIS SOFTWARE"]
+        INIT["Camera, MIPI, Gamma,<br/>VDMA and Video Initialization"]
+        SELECT["Read Up To 6 Objects<br/>Select Lowest Y Then Lowest X"]
+        GATE["SW0 and RC Car Presence Gate"]
+        PACKET["UART TARGET Packet<br/>Sequence, X, Y, CRC8"]
+        ACK["Wait for Matching ACK"]
+    end
+
+    ARDUINO["Arduino / OpenRB-150<br/>Boundary of This Diagram"]
+
+    PCAM -->|"MIPI"| DPHY
+    DPHY --> CSI
+    CSI -->|"AXI4-Stream Bayer"| BAYER
+    BAYER -->|"AXI4-Stream RGB"| GAMMA
+    GAMMA -->|"AXI4-Stream"| S2MM
+    S2MM --> DDR
+    DDR --> MM2S
+    MM2S -->|"AXI4-Stream RGB"| WRAPPER
+
+    WRAPPER --> TRACKER
+    TRACKER -->|"RGB pixel"| HSV
+    HSV -->|"blue_match"| TRACKER
+    TRACKER --> STABLE
+    STABLE --> PACK
+    TRACKER --> OVERLAY
+    OVERLAY --> VOUT
+    VTG --> VOUT
+    VOUT --> DVI
+    DVI --> HDMI
+
+    PACK -->|"32-bit coord_word"| CGPIO
+    CGPIO -->|"AXI4-Lite Read"| PS
+
+    SR04 -->|"Echo"| GUARD
+    GUARD -->|"Trigger"| SR04
+    GUARD -->|"32-bit status_word"| SGPIO
+    SGPIO -->|"AXI4-Lite Read"| PS
+
+    PS --> INIT
+    PS --> SELECT
+    PS --> GATE
+    SELECT --> PACKET
+    GATE --> PACKET
+    PACKET -->|"UART 115200, 8-N-1"| ARDUINO
+    ARDUINO -->|"ACK"| ACK

@@ -1,0 +1,87 @@
+# ===========================
+# OS & IDE
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# ===========================
+# Python
+# ===========================
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+*.egg
+dist/
+.venv/
+venv/
+env/
+
+# ===========================
+# C / C++ Build
+# ===========================
+build/
+*.o
+*.d
+*.a
+*.so
+*.exe
+*.out
+
+# ===========================
+# Xilinx Vivado / Vitis
+# ===========================
+*.cache/
+*.runs/
+*.tmp/
+*.sim/
+*.hbs/
+*.hw/
+.Xil/
+*.jou
+*.log
+*.str
+*.backup.jou
+*.backup.log
+*.wdb
+*.wlf
+webtalk/
+hw.ip_user_files/
+hw.ipdefs/
+ip_upgrade.log
+vivado_pid*.zip
+vitis_pid*.str
+
+# ===========================
+# Zybo_2 — 원본 Vivado 프로젝트 (720MB 빌드 캐시)
+# 핵심 소스는 fpga/vision-pipeline/ 에 정리됨
+# ===========================
+Zybo_2/
+
+# ===========================
+# 대용량 드라이버 소스 (150MB)
+# ===========================
+jetson/optional_drivers/
+
+# ===========================
+# 죽은 코드 / 사본
+# ===========================
+rc_shuttle/attic/
+
+# ===========================
+# 로그 잔여물
+# ===========================
+fail_log.txt
+*.log
+
+# ===========================
+# Misc
+# ===========================
+*.zip

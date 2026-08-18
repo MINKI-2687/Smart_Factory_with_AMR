@@ -1,0 +1,239 @@
+{
+  "approval_scope": "same-site development ONNX baseline only",
+  "backend_epsilon": 0.02,
+  "camera_fault_blocking_validated": false,
+  "code_snapshot": {
+    "canonical_source_file": "training_notebook_source.py",
+    "canonical_source_sha256": "856ad28f4019a82033105b0cfe027244fc3d244198f21d84a5907da2dfa3ca7f",
+    "notebook_semantic_sha256": "0e15c2fef719ce4d01d8087d3e23128b5a1a55d96d604c632243571f0176884e",
+    "notebook_snapshot_file": "executed_notebook_snapshot.ipynb",
+    "notebook_snapshot_sha256": "026c20eec2b0144aec68c7488da51437b4c7a1a81807a7b8f31417db7f794450",
+    "release_manifest_file": "notebook_release_manifest.json",
+    "release_manifest_sha256": "3a0eb19d252b3abe8dba9bb24b1352ac4ea892cbba06f57e6d37fdb0466759f3"
+  },
+  "data": {
+    "dataset_config_sha256": "e332345873ad99e73b94440362b3985f7edb77f7545a5a4b190a26732bf98bde",
+    "dataset_id": "rack_roi_dataset_v2",
+    "dataset_summary_sha256": "5c6bab6e789b1ca59d6f21d8f076c37404a24cb862e6033f54ee4620cfa24db5",
+    "dataset_zip_sha256": "da90b2e5ed976b918f326c8332a36f09bdbe023d7d7bd5e2d08e8c629193ed09",
+    "frame_manifest_sha256": "7fa296bff82918087342c1cb5dcfd5b1a439118a2b2d774e08437cb57492678a",
+    "input_sha256_manifest_sha256": "2a2a5145e1ff55168ee1d7e820bcafcd47e768b878fa59e164f99ae91669140f",
+    "label_corrections_sha256": "fde23ecf0e061ea327a51ce0004a77d09878102ac1afbedbba03b0cfd57c7500",
+    "roi_manifest_sha256": "c0473395c445a4c6a7df3417989bd29f1848a028b4f1bd25207968bbe08c9fd6",
+    "split_consumption_sha256": "1cc5d9c06f64273def02cc61942491908373772fc718cc7d8450c89aefe97ecd",
+    "test_set_fingerprint": "4419eafb16ef689582a5347caf080831730e73868ccea1cb4d34d20d6de2d97a",
+    "validation_capture_ids": [
+      "a071",
+      "a072",
+      "a073",
+      "a074",
+      "a075",
+      "a076",
+      "a077",
+      "a078",
+      "a079",
+      "a080"
+    ]
+  },
+  "dataset_id": "rack_roi_dataset_v2",
+  "deployment_authorized": false,
+  "deployment_limitations": [
+    "field test has not passed",
+    "TensorRT parity has not been verified",
+    "temporal filter and camera-fault command blocking are not validated"
+  ],
+  "field_test_passed": false,
+  "model": {
+    "architecture": "mobilenet_v3_small",
+    "checkpoint_sha256": "791a597fb33eae9f95ef7f517cd53d30da2f14a8c99d61893683e00a8532884b",
+    "onnx_file": "rack_occupancy_mobilenetv3_small.onnx",
+    "onnx_sha256": "61734686ea049434d393d424933581cd875d6478ca6fc3c1bca91d19e2e04c7d",
+    "pooling": "spatial_mean_keepdim"
+  },
+  "preprocessing": {
+    "class_to_index": {
+      "EMPTY": 0,
+      "OCCUPIED": 1
+    },
+    "input_dtype": "float32",
+    "input_name": "images",
+    "input_shape": [
+      "N",
+      3,
+      224,
+      224
+    ],
+    "normalization": {
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ]
+    },
+    "occupied_index": 1,
+    "output_name": "p_occupied",
+    "resize": {
+      "antialias": true,
+      "center_crop": false,
+      "height": 224,
+      "interpolation": "bilinear",
+      "width": 224
+    },
+    "schema_version": 1,
+    "source_color_space": "RGB",
+    "tensor_layout": "NCHW",
+    "uint8_to_float": "value / 255.0"
+  },
+  "reproducibility_artifacts": {
+    "environment_sha256": "5452b2da71904850cbdbb497f1a698f165cbd5b71ae6aa1dbc0847df9af7e16f",
+    "preprocessing_sha256": "29ddc8da6a0c77377b5a66ecc40c88bd5072525ec48bf17673a35332caeae41d",
+    "training_config_sha256": "0d08e33690e98358439062f7e8eae4646d3b63f6c012033c4369c9eee5f274ac"
+  },
+  "roi_calibration": {
+    "calibration_id": "calv2",
+    "coordinate_format": "x0_y0_x1_y1_exclusive",
+    "frame_height": 720,
+    "frame_width": 1280,
+    "live_alignment_required": true,
+    "reference_frame": "raw/s01_train/c270_calv1_s01_l00_a001.jpg",
+    "slots": {
+      "C1_L1": [
+        250,
+        480,
+        505,
+        665
+      ],
+      "C1_L2": [
+        250,
+        265,
+        508,
+        447
+      ],
+      "C1_L3": [
+        250,
+        45,
+        508,
+        224
+      ],
+      "C2_L1": [
+        545,
+        480,
+        795,
+        665
+      ],
+      "C2_L2": [
+        545,
+        265,
+        795,
+        447
+      ],
+      "C2_L3": [
+        545,
+        45,
+        795,
+        224
+      ],
+      "C3_L1": [
+        845,
+        480,
+        1100,
+        665
+      ],
+      "C3_L2": [
+        845,
+        265,
+        1100,
+        447
+      ],
+      "C3_L3": [
+        845,
+        45,
+        1100,
+        224
+      ]
+    },
+    "status": "recorded_s01_only"
+  },
+  "run_id": "20260801T060414Z_c37b859a",
+  "schema_version": 1,
+  "statistical_limitation": "Each 90-ROI split comes from only 10 captured frames; ROI outcomes within a frame are correlated, so no iid safety-error-rate claim is made.",
+  "status": "ONNX_BASELINE_READY",
+  "temporal_filter_validated": false,
+  "tensorrt_verified": false,
+  "test_consumption": {
+    "set_lock": {
+      "relative_path": "evaluation/test_locks/4419eafb16ef689582a5347caf080831730e73868ccea1cb4d34d20d6de2d97a.lock.json",
+      "sha256": "1f78dd0bea319c1154ca376074349dfff2f05a44b6cc4cbc7f5a6fdcd6eb79cc"
+    },
+    "source_frame_locks": [
+      {
+        "raw_source_frame_sha256": "2b75935cc5dd76da39c15a66eca159b9751e054874223342cc670e824c20060d",
+        "relative_path": "evaluation/test_locks/source_frames/2b75935cc5dd76da39c15a66eca159b9751e054874223342cc670e824c20060d.lock.json",
+        "sha256": "c8a13f0b1d992581011b4ce7929ab66c2d617838a6939d613096a8e62b0ff839"
+      },
+      {
+        "raw_source_frame_sha256": "6371e08dd3142e07f18ba8e7f1e7546b92f3709340dc808f77e714bfc545e339",
+        "relative_path": "evaluation/test_locks/source_frames/6371e08dd3142e07f18ba8e7f1e7546b92f3709340dc808f77e714bfc545e339.lock.json",
+        "sha256": "1649c320295e316ecdfd1d70f59f94527d7b1e2484f397431db09f2f5364f9ce"
+      },
+      {
+        "raw_source_frame_sha256": "67e3a4a4527e9a61542b6973b3148bc42ca95686099a5091330a93daa5c8aa21",
+        "relative_path": "evaluation/test_locks/source_frames/67e3a4a4527e9a61542b6973b3148bc42ca95686099a5091330a93daa5c8aa21.lock.json",
+        "sha256": "357eaf54630f249cfc89875bd4c3c87ae28f39b832c9f280fa61339a81db8955"
+      },
+      {
+        "raw_source_frame_sha256": "6a9c1be43c38231c7df087f664c7ce3f6e36004122affc9962bc56d713593fdc",
+        "relative_path": "evaluation/test_locks/source_frames/6a9c1be43c38231c7df087f664c7ce3f6e36004122affc9962bc56d713593fdc.lock.json",
+        "sha256": "74f86879608aa2efcc45e24eefaff5fb41e82d4bf98c40ed9bf484ab29a1e185"
+      },
+      {
+        "raw_source_frame_sha256": "72da89b126fb137885b016f8c0286d2428a8e564c380d26c1d24e7b889e7d217",
+        "relative_path": "evaluation/test_locks/source_frames/72da89b126fb137885b016f8c0286d2428a8e564c380d26c1d24e7b889e7d217.lock.json",
+        "sha256": "0c2f530064c3b59ec62abe29b3097b9c3ebcd8cec86f6dc98ec259eaf59b15e7"
+      },
+      {
+        "raw_source_frame_sha256": "7367c7cf6f01527ab3ae01bdc0a95a0418b4bf9cdeb397bc28706bbe51207cf2",
+        "relative_path": "evaluation/test_locks/source_frames/7367c7cf6f01527ab3ae01bdc0a95a0418b4bf9cdeb397bc28706bbe51207cf2.lock.json",
+        "sha256": "abb858d0e4e49d20dbf78872a930e9496df1e5d719837ffc7a7642926edbb075"
+      },
+      {
+        "raw_source_frame_sha256": "975c15407fe7aaaca3cd72b165019d3db901eefdf841df89f46c6c20c2c78f77",
+        "relative_path": "evaluation/test_locks/source_frames/975c15407fe7aaaca3cd72b165019d3db901eefdf841df89f46c6c20c2c78f77.lock.json",
+        "sha256": "5999a154584d4d827409e433cbace467c5522231ea46cb7064402ab95094b79c"
+      },
+      {
+        "raw_source_frame_sha256": "99ff88ab2c41ca508281e10732f6f5a14fd04aa82a0fad7cad1e2a5da7b94531",
+        "relative_path": "evaluation/test_locks/source_frames/99ff88ab2c41ca508281e10732f6f5a14fd04aa82a0fad7cad1e2a5da7b94531.lock.json",
+        "sha256": "e176688b1195b7b7fdb1b265f2c95f510068ad0d56ca1afe57e439f4b5de58ca"
+      },
+      {
+        "raw_source_frame_sha256": "b9cffb305664c70b6d76653530801bd8ae93e4acd0701db6adf7ca6e5f875bd9",
+        "relative_path": "evaluation/test_locks/source_frames/b9cffb305664c70b6d76653530801bd8ae93e4acd0701db6adf7ca6e5f875bd9.lock.json",
+        "sha256": "637ecff684af7112198f516f72cdf9208e3b5c86f2ff6e98cbfb03cce0f7f7ec"
+      },
+      {
+        "raw_source_frame_sha256": "f03e170cf3c9ae912795b37799a66a1d9de168c36bc763770341ed78ecae2778",
+        "relative_path": "evaluation/test_locks/source_frames/f03e170cf3c9ae912795b37799a66a1d9de168c36bc763770341ed78ecae2778.lock.json",
+        "sha256": "bea52893ec87e1bc77598e5be2948ba34c4db638a31b627f658f7b03164c254c"
+      }
+    ],
+    "test_consumed": true,
+    "test_set_fingerprint": "4419eafb16ef689582a5347caf080831730e73868ccea1cb4d34d20d6de2d97a"
+  },
+  "test_report_file": "test_report.json",
+  "test_report_sha256": "d8a8f9edaa2fe128d7264935b1e547231b72e62caf6540697ac4494f59343994",
+  "test_status": "ONNX_BASELINE_READY",
+  "thresholds": {
+    "empty_rule": "p_occupied <= t_empty",
+    "occupied_rule": "p_occupied >= t_occupied",
+    "t_empty": 0.005,
+    "t_occupied": 0.995,
+    "unknown_rule": "t_empty < p_occupied < t_occupied"
+  },
+  "thresholds_sha256": "777504444e34c38ab33b9369e5495a7863e824be5c28e54b8d95b05bb846323f"
+}

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) draw.io/24.0.0" version="24.0.0" pages="1">
+  <diagram name="RC Car Compact Block Diagram" id="rc_car_ppt_compact">
+    <mxGraphModel dx="1100" dy="620" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1100" pageHeight="620" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;Basys3 FPGA &amp;amp; Raspberry Pi Dual-Wheel RC Car Control System (PPT Widescreen)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=15;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="180" y="6" width="740" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="port_pi" value="&lt;b&gt;Raspberry Pi 4&lt;/b&gt;&lt;br/&gt;(Host Controller)&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;UART 115200bps&lt;br/&gt;Cmd TX / Telemetry RX&lt;/font&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#F3E8FF;strokeColor=#9333EA;fontStyle=1;fontSize=9;fontColor=#581C87;" vertex="1" parent="1">
+          <mxGeometry x="8" y="48" width="115" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="port_sw" value="&lt;b&gt;Basys3 Switches&lt;/b&gt;&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• 100MHz Clk / Rst&lt;br/&gt;• sw[15]: MUX Select&lt;br/&gt;• sw[14]: Speed (255/180)&lt;br/&gt;• sw[3:0]: Dir &amp;amp; Brake&lt;/font&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#F1F5F9;strokeColor=#475569;fontStyle=1;fontSize=9;fontColor=#1E293B;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="8" y="185" width="115" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="port_enc" value="&lt;b&gt;IR Wheel Encoders&lt;/b&gt;&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• Left: enc_pin_l&lt;br/&gt;• Right: enc_pin_r&lt;br/&gt;(Optocouplers)&lt;/font&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#DCFCE7;strokeColor=#15803D;fontStyle=1;fontSize=9;fontColor=#064E3B;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="8" y="348" width="115" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_pl" value="Vivado — Programmable Logic (rc_car_top.sv @ Basys3 Artix-7)" style="swimlane;startSize=20;fillColor=#F8FAFC;strokeColor=#334155;fontStyle=1;fontSize=10;fontColor=#0F172A;rounded=1;arcSize=6;swimlaneLine=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="130" y="42" width="825" height="425" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_uart" value="[1] UART Communication Subsystem (u_uart: uart_top)" style="swimlane;startSize=16;fillColor=#F0F9FF;strokeColor=#0284C7;fontStyle=1;fontSize=8.5;fontColor=#0369A1;rounded=1;arcSize=8;" vertex="1" parent="grp_pl">
+          <mxGeometry x="10" y="25" width="805" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="u_baud" value="&lt;b&gt;baud_tick&lt;/b&gt;&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;100MHz / (115200×16)&lt;br/&gt;→ 16x Tick (b_tick)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BAE6FD;strokeColor=#0284C7;fontSize=8;fontStyle=1;" vertex="1" parent="grp_uart">
+          <mxGeometry x="10" y="22" width="130" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="u_rx" value="&lt;b&gt;uart_rx&lt;/b&gt; (U_UART_RX)&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;Serial → 8-bit rx_data &amp;amp; rx_done&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0369A1;fontSize=8;fontStyle=1;" vertex="1" parent="grp_uart">
+          <mxGeometry x="200" y="22" width="220" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="u_tx" value="&lt;b&gt;uart_tx&lt;/b&gt; (U_UART_TX)&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;8-bit tx_data → Serial (tx_start/busy)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0369A1;fontSize=8;fontStyle=1;" vertex="1" parent="grp_uart">
+          <mxGeometry x="480" y="22" width="220" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="e_baud_rx" source="u_baud" target="u_rx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#0284C7;" edge="1" parent="grp_uart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_baud_rx_lbl" value="b_tick" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_baud_rx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_baud_tx" source="u_baud" target="u_tx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#0284C7;" edge="1" parent="grp_uart">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="68" />
+              <mxPoint x="460" y="68" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_baud_tx_lbl" value="b_tick" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_baud_tx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_cmd" value="[2] Command Decoder &amp;amp; Fail-Safe Watchdog" style="swimlane;startSize=16;fillColor=#FEF3C7;strokeColor=#D97706;fontStyle=1;fontSize=8.5;fontColor=#92400E;rounded=1;arcSize=8;" vertex="1" parent="grp_pl">
+          <mxGeometry x="10" y="118" width="395" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="u_cmd_rx" value="&lt;b&gt;cmd_rx&lt;/b&gt; (u_cmd_rx)&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• Format: &quot;M [+-]PWM_L [+-]PWM_R\n&quot;&lt;br/&gt;• Shift-Add ascii2bin (x*100=x&amp;lt;&amp;lt;6+x&amp;lt;&amp;lt;5+x&amp;lt;&amp;lt;2)&lt;br/&gt;• Duty Guard ≤ 255 / Brake Detect&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDE68A;strokeColor=#D97706;fontSize=8;fontStyle=1;align=left;spacingLeft=6;" vertex="1" parent="grp_cmd">
+          <mxGeometry x="8" y="22" width="235" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="u_watchdog" value="&lt;b&gt;watchdog&lt;/b&gt;&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• 500ms Timer&lt;br/&gt;• Resets on tick&lt;br/&gt;• Cutoff Brake&lt;br/&gt;  if link lost&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDE68A;strokeColor=#D97706;fontSize=8;fontStyle=1;align=left;spacingLeft=4;" vertex="1" parent="grp_cmd">
+          <mxGeometry x="252" y="22" width="134" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="e_cmd_wd" source="u_cmd_rx" target="u_watchdog" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#D97706;" edge="1" parent="grp_cmd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_cmd_wd_lbl" value="valid_cmd_tick" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_cmd_wd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_motor" value="[3] Mode MUX &amp;amp; Motor Controller (u_motor)" style="swimlane;startSize=16;fillColor=#EEF2FF;strokeColor=#4F46E5;fontStyle=1;fontSize=8.5;fontColor=#3730A3;rounded=1;arcSize=8;" vertex="1" parent="grp_pl">
+          <mxGeometry x="415" y="118" width="400" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="u_mux" value="&lt;b&gt;Mode MUX &amp;amp; Integrated Brake&lt;/b&gt; (sw[15]: Auto/Manual | final_brake = rx_brake | wd_brake)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0E7FF;strokeColor=#6366F1;fontSize=7.5;fontStyle=1;align=left;spacingLeft=6;" vertex="1" parent="grp_motor">
+          <mxGeometry x="8" y="22" width="384" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="u_motor_ctrl" value="&lt;b&gt;motor_controller &amp;amp; pwm_generator&lt;/b&gt;&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• Dual PWM Gen: 100MHz/20/256 ≈ &lt;b&gt;19.5 kHz PWM&lt;/b&gt; (Ultrasonic)&lt;br/&gt;• L298N Dynamic Brake: Brake=1 → IN1=1, IN2=1, ENA=1 (Short Brake)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C7D2FE;strokeColor=#4F46E5;fontSize=8;fontStyle=1;align=left;spacingLeft=6;" vertex="1" parent="grp_motor">
+          <mxGeometry x="8" y="58" width="384" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_enc" value="[4] Motor Encoder Processing &amp;amp; Telemetry Subsystem" style="swimlane;startSize=16;fillColor=#E6F4EA;strokeColor=#16A34A;fontStyle=1;fontSize=8.5;fontColor=#15803D;rounded=1;arcSize=8;" vertex="1" parent="grp_pl">
+          <mxGeometry x="10" y="268" width="805" height="148" as="geometry" />
+        </mxCell>
+        <mxCell id="u_enc_l" value="&lt;b&gt;encoder_counter&lt;/b&gt; (Left)&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• 2-Stage Sync (enc_sync_1/2)&lt;br/&gt;• Falling Edge Counter (+/-)&lt;br/&gt;• Output: count_l [15:0]&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C6F6D5;strokeColor=#16A34A;fontSize=8;fontStyle=1;align=left;spacingLeft=6;" vertex="1" parent="grp_enc">
+          <mxGeometry x="8" y="22" width="185" height="116" as="geometry" />
+        </mxCell>
+        <mxCell id="u_enc_r" value="&lt;b&gt;encoder_counter&lt;/b&gt; (Right)&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• 2-Stage Sync (enc_sync_1/2)&lt;br/&gt;• Falling Edge Counter (+/-)&lt;br/&gt;• Output: count_r [15:0]&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C6F6D5;strokeColor=#16A34A;fontSize=8;fontStyle=1;align=left;spacingLeft=6;" vertex="1" parent="grp_enc">
+          <mxGeometry x="200" y="22" width="185" height="116" as="geometry" />
+        </mxCell>
+        <mxCell id="u_enc_tx" value="&lt;b&gt;encoder_tx&lt;/b&gt; — Telemetry FSM&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• Periodic 50ms Timer (5M cycles @ 100MHz)&lt;br/&gt;• Shift-Add Hex Conversion nibble2hex&lt;br/&gt;• Packet Formatter: &quot;P +0000 +0000\n&quot;&lt;br/&gt;• Drives uart_tx (tx_data, tx_start)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#BBF7D0;strokeColor=#15803D;fontSize=8;fontStyle=1;align=left;spacingLeft=6;" vertex="1" parent="grp_enc">
+          <mxGeometry x="392" y="22" width="404" height="116" as="geometry" />
+        </mxCell>
+        <mxCell id="e_encl_tx" source="u_enc_l" target="u_enc_tx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#16A34A;" edge="1" parent="grp_enc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_encl_tx_lbl" value="w_count_l" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_encl_tx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_encr_tx" source="u_enc_r" target="u_enc_tx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#16A34A;" edge="1" parent="grp_enc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_encr_tx_lbl" value="w_count_r" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_encr_tx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="port_l298n" value="&lt;b&gt;L298N Motor Driver&lt;/b&gt;&lt;br/&gt;(Dual H-Bridge Board)&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• ENA, IN1, IN2 (Left)&lt;br/&gt;• ENB, IN3, IN4 (Right)&lt;br/&gt;• OUT1~OUT4 Terminals&lt;/font&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#FFE4E6;strokeColor=#E11D48;fontStyle=1;fontSize=9;fontColor=#881337;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="965" y="160" width="125" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="port_motors" value="&lt;b&gt;Dual TT Motors&lt;/b&gt;&lt;br/&gt;(Left &amp;amp; Right Wheels)&lt;br/&gt;&lt;font size=&quot;1&quot;&gt;• Differential Steering&lt;br/&gt;• Propelled Wheels&lt;/font&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;fillColor=#FFF7ED;strokeColor=#EA580C;fontStyle=1;fontSize=9;fontColor=#7C2D12;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="965" y="310" width="125" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pi_rx" source="port_pi" target="u_rx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#9333EA;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="75" />
+              <mxPoint x="170" y="92" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_pi_rx_lbl" value="uart_rx" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_pi_rx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_tx_pi" source="u_tx" target="port_pi" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#0284C7;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="115" />
+              <mxPoint x="620" y="135" />
+              <mxPoint x="170" y="135" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_tx_pi_lbl" value="uart_tx" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_tx_pi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_rx_cmd" source="u_rx" target="u_cmd_rx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#0284C7;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_rx_cmd_lbl" value="w_rx_data &amp;amp; rx_done" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_rx_cmd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sw_mux" source="port_sw" target="u_mux" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#475569;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="260" />
+              <mxPoint x="160" y="182" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_sw_mux_lbl" value="sw[15:0]" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_sw_mux">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_cmd_mux" source="u_cmd_rx" target="u_mux" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#D97706;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400" y="200" />
+              <mxPoint x="400" y="182" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_cmd_mux_lbl" value="w_duty, w_dir, w_rx_brake" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_cmd_mux">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_wd_mux" source="u_watchdog" target="u_mux" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#D97706;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="200" />
+              <mxPoint x="530" y="182" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_wd_mux_lbl" value="w_watchdog_brake" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_wd_mux">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_motor_l298n" source="u_motor_ctrl" target="port_l298n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#4F46E5;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="940" y="230" />
+              <mxPoint x="940" y="227" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_motor_l298n_lbl" value="ena, in1~2, enb, in3~4" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_motor_l298n">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_l298n_motors" source="port_l298n" target="port_motors" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#E11D48;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_l298n_motors_lbl" value="OUT1~4 Power" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_l298n_motors">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sens_encl" source="port_enc" target="u_enc_l" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;strokeColor=#15803D;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="405" />
+              <mxPoint x="150" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_sens_encl_lbl" value="enc_pin_l/r" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=7.5;fontColor=#333333;backgroundColor=#FFFFFF;" vertex="1" connectable="0" parent="e_sens_encl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_box" value="&lt;b&gt;시스템 요약 (Basys3 FPGA RC Car)&lt;/b&gt;&lt;br/&gt;• 주 제어기: Basys3 (Artix-7 FPGA)&lt;br/&gt;• 상위 제어기: Raspberry Pi 4 (UART 통신)&lt;br/&gt;• 모터 드라이버: L298N Dual H-Bridge&lt;br/&gt;• 바퀴 센서: 적외선(IR) 광센서 엔코더" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F9FAFB;strokeColor=#D1D5DB;fontSize=8;fontStyle=0;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="8" y="472" width="265" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="protocol_box" value="&lt;b&gt;UART 통신 패킷 정의 (115200 bps, 8-N-1)&lt;/b&gt;&lt;br/&gt;• &lt;b&gt;명령 수신 (Pi → FPGA)&lt;/b&gt;: &quot;M [+-]PWM_L [+-]PWM_R\n&quot; (12 Bytes)&lt;br/&gt;  - 예: &quot;M +255 +255\n&quot; (전진 100%), &quot;M +000 +000\n&quot; (급정거)&lt;br/&gt;• &lt;b&gt;엔코더 송신 (FPGA → Pi)&lt;/b&gt;: &quot;P +[COUNT_L] +[COUNT_R]\n&quot; (16 Bytes)&lt;br/&gt;  - 50ms 주기 전송, 16진수 ASCII Hex 표기" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#D97706;fontSize=8;fontStyle=0;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="280" y="472" width="435" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="failsafe_box" value="&lt;b&gt;안전 메커니즘 &amp;amp; 모터 스펙&lt;/b&gt;&lt;br/&gt;• &lt;b&gt;500ms Watchdog Timer&lt;/b&gt;: 명령 단절 시 강제 제동&lt;br/&gt;• &lt;b&gt;전자 동적 브레이크&lt;/b&gt;: Brake=1 시 IN=1, EN=1 전자기 단락 정지&lt;br/&gt;• &lt;b&gt;19.5 kHz PWM&lt;/b&gt;: 가청 주파수 대역 탈피 (초음파 소음 제거)&lt;br/&gt;• &lt;b&gt;DSP-Free 아키텍처&lt;/b&gt;: Shift-Add 만으로 연산 (-32ns 오차 제거)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#16A34A;fontSize=8;fontStyle=0;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="722" y="472" width="368" height="135" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

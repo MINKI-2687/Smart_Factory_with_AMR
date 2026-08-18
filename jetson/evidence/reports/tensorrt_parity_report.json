@@ -1,0 +1,80 @@
+{
+  "engine": {
+    "bytes": 4121452,
+    "path": "/home/aidl/work/rack_dataset_v1/deployment/jetson/20260801T060414Z_c37b859a/engine/rack_occupancy_mobilenetv3_small_fp16_trt10.3.plan",
+    "precision_build_flag": "FP16 enabled with FP32 input/output",
+    "profile": {
+      "maximum": [
+        9,
+        3,
+        224,
+        224
+      ],
+      "minimum": [
+        1,
+        3,
+        224,
+        224
+      ],
+      "optimum": [
+        9,
+        3,
+        224,
+        224
+      ]
+    },
+    "sha256": "59aca85080abf437d9c142bc1f14fd09c105f91390cab63b9f85ad978c851e23",
+    "tensorrt_version": "10.3.0"
+  },
+  "frozen_thresholds": {
+    "backend_epsilon": 0.02,
+    "t_empty": 0.005,
+    "t_occupied": 0.995
+  },
+  "gate_passed": true,
+  "gate_reasons": [],
+  "reference": "frozen Colab ONNX validation_predictions.csv",
+  "run_id": "20260801T060414Z_c37b859a",
+  "schema_version": 1,
+  "scope": "validation_original_only; held-out test not opened",
+  "software": {
+    "numpy": "1.21.5",
+    "pillow": "9.0.1",
+    "python": "3.10.12"
+  },
+  "source_integrity": {
+    "dataset_config_sha256": "e332345873ad99e73b94440362b3985f7edb77f7545a5a4b190a26732bf98bde",
+    "dataset_summary_sha256": "5c6bab6e789b1ca59d6f21d8f076c37404a24cb862e6033f54ee4620cfa24db5",
+    "roi_manifest_sha256": "c0473395c445a4c6a7df3417989bd29f1848a028b4f1bd25207968bbe08c9fd6"
+  },
+  "status": "TENSORRT_PARITY_PASSED",
+  "timing": {
+    "batch1_mean_ms": 2.96687872258998,
+    "batch1_p95_ms": 3.0371194465260487,
+    "batch1_runs": 90,
+    "batch9_mean_ms": 8.801805399707519,
+    "batch9_mean_ms_per_roi": 0.9779783777452798,
+    "batch9_p95_ms": 9.247648145537823,
+    "batch9_runs": 10,
+    "definition": "CUDA H2D + TensorRT execution + D2H + stream sync"
+  },
+  "validation": {
+    "captures": 10,
+    "cross_errors_batch9": {},
+    "dangerous_occupied_to_empty_batch9": 0,
+    "decision_mismatches_batch1_vs_onnx": 0,
+    "decision_mismatches_batch9_vs_onnx": 0,
+    "decisions_batch9": {
+      "EMPTY": 45,
+      "OCCUPIED": 45
+    },
+    "labels": {
+      "EMPTY": 45,
+      "OCCUPIED": 45
+    },
+    "max_abs_difference_batch9_vs_batch1": 0.0,
+    "max_abs_difference_batch9_vs_onnx": 0.00014257431030273438,
+    "mean_abs_difference_batch9_vs_onnx": 2.597119876881123e-06,
+    "samples": 90
+  }
+}

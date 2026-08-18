@@ -1,0 +1,73 @@
+{
+  "alignment": {
+    "max_allowed_shift": 8,
+    "minimum_score": 0.35,
+    "passed": true,
+    "score": 0.7808834178131788,
+    "shift_x": 4,
+    "shift_y": -8
+  },
+  "command_authorized": false,
+  "command_block_reason": "TEMPORAL_FILTER_NOT_YET_SATISFIED",
+  "decision_counts": {
+    "EMPTY": 9
+  },
+  "engine": {
+    "batch_size": 9,
+    "inference_ms": 9.228866008925252,
+    "path": "/home/aidl/work/rack_dataset_v1/deployment/jetson/20260801T060414Z_c37b859a/engine/rack_occupancy_mobilenetv3_small_fp16_trt10.3.plan",
+    "sha256": "59aca85080abf437d9c142bc1f14fd09c105f91390cab63b9f85ad978c851e23"
+  },
+  "frame": {
+    "height": 720,
+    "path": "/home/aidl/work/rack_dataset_v1/deployment/camera_calibration/20260801T072937Z_exposure_trials/final_selected_auto_backlight0_brightness128.jpg",
+    "sha256": "59a303ae92d0ce06f03de32a09a02b27058d8cbb05b527f2912844857374ff1d",
+    "width": 1280
+  },
+  "schema_version": 1,
+  "scope": "current live frame; not train/validation/test",
+  "slots": {
+    "C1_L1": {
+      "decision": "EMPTY",
+      "p_occupied": 2.562999725341797e-06
+    },
+    "C1_L2": {
+      "decision": "EMPTY",
+      "p_occupied": 1.5795230865478516e-05
+    },
+    "C1_L3": {
+      "decision": "EMPTY",
+      "p_occupied": 5.960464477539063e-08
+    },
+    "C2_L1": {
+      "decision": "EMPTY",
+      "p_occupied": 6.556510925292969e-07
+    },
+    "C2_L2": {
+      "decision": "EMPTY",
+      "p_occupied": 2.086162567138672e-06
+    },
+    "C2_L3": {
+      "decision": "EMPTY",
+      "p_occupied": 3.993511199951172e-06
+    },
+    "C3_L1": {
+      "decision": "EMPTY",
+      "p_occupied": 2.384185791015625e-07
+    },
+    "C3_L2": {
+      "decision": "EMPTY",
+      "p_occupied": 0.00018966197967529297
+    },
+    "C3_L3": {
+      "decision": "EMPTY",
+      "p_occupied": 3.6954879760742188e-06
+    }
+  },
+  "status": "SINGLE_FRAME_INFERENCE_COMPLETE",
+  "stm32_bytes_sent": 0,
+  "thresholds": {
+    "t_empty": 0.005,
+    "t_occupied": 0.995
+  }
+}

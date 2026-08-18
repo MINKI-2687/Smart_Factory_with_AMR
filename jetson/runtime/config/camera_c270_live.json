@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "camera_model": "Logitech C270 HD Webcam",
+  "usb_id": "046d:0825",
+  "device": "/dev/video0",
+  "format": {
+    "pixel_format": "MJPG",
+    "width": 1280,
+    "height": 720,
+    "fps": 30
+  },
+  "controls": {
+    "auto_exposure": 3,
+    "exposure_dynamic_framerate": 1,
+    "backlight_compensation": 1,
+    "brightness": 128,
+    "contrast": 32,
+    "saturation": 32,
+    "white_balance_automatic": 1,
+    "power_line_frequency": 2,
+    "sharpness": 24
+  },
+  "display": {
+    "preview_brightness": 0.82
+  },
+  "rationale": "Preserve the training-time automatic exposure and default color controls. Exposure-reduction trials caused dangerous live OCCUPIED-to-EMPTY predictions, so only the browser preview is dimmed; TensorRT continues to receive the original camera pixels.",
+  "calibration_evidence": "deployment/camera_calibration/20260801T072937Z_exposure_trials"
+}

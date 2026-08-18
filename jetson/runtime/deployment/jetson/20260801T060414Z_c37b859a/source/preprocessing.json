@@ -1,0 +1,39 @@
+{
+  "class_to_index": {
+    "EMPTY": 0,
+    "OCCUPIED": 1
+  },
+  "input_dtype": "float32",
+  "input_name": "images",
+  "input_shape": [
+    "N",
+    3,
+    224,
+    224
+  ],
+  "normalization": {
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  },
+  "occupied_index": 1,
+  "output_name": "p_occupied",
+  "resize": {
+    "antialias": true,
+    "center_crop": false,
+    "height": 224,
+    "interpolation": "bilinear",
+    "width": 224
+  },
+  "schema_version": 1,
+  "source_color_space": "RGB",
+  "tensor_layout": "NCHW",
+  "uint8_to_float": "value / 255.0"
+}

@@ -1,0 +1,60 @@
+{
+  "augmentation_seed": 20260801,
+  "class_counts": {
+    "test": {
+      "EMPTY": 45,
+      "OCCUPIED": 45
+    },
+    "train": {
+      "EMPTY": 1090,
+      "OCCUPIED": 1160
+    },
+    "validation": {
+      "EMPTY": 45,
+      "OCCUPIED": 45
+    }
+  },
+  "dataset_id": "rack_roi_dataset_v2",
+  "frame_counts": {
+    "test": 10,
+    "train": 50,
+    "validation": 10
+  },
+  "fresh_test_capture_ids": [
+    "a081",
+    "a082",
+    "a083",
+    "a084",
+    "a085",
+    "a086",
+    "a087",
+    "a088",
+    "a089",
+    "a090"
+  ],
+  "input_fingerprint_manifest": "manifests/input_sha256.csv",
+  "parent_dataset_id": "rack_roi_dataset_v1",
+  "parent_dataset_zip_sha256": "e86680610423f9817d1b7509cd451db1b4316c9a89083b4212eb08cee142aa74",
+  "retired_test_capture_ids": [
+    "a009",
+    "a010",
+    "a014",
+    "a034",
+    "a038",
+    "a039",
+    "a041",
+    "a045",
+    "a046",
+    "a047"
+  ],
+  "retired_test_report_sha256": "a6271d1bf9954242540ed01b02ce39e7234016c6dac8e683764d60683075c4eb",
+  "retired_test_run_id": "20260801T034050Z_e0939e7c",
+  "roi_calibration_id": "calv2",
+  "sample_counts": {
+    "test": 90,
+    "train": 2250,
+    "validation": 90
+  },
+  "schema_version": 2,
+  "total_samples": 2430
+}

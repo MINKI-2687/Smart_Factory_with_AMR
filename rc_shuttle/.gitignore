@@ -1,0 +1,12 @@
+# 빌드 산출물 - 예전엔 바이너리 13개와 .so 5개가 저장소에 커밋돼 있었다
+build/
+main_shuttle
+*.o
+*.d
+*.a
+*.so
+__pycache__/
+*.pyc
+
+# 로그 잔여물
+fail_log.txt

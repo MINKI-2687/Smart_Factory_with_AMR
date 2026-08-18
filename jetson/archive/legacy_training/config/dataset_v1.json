@@ -1,0 +1,44 @@
+{
+  "dataset_id": "rack_roi_dataset_v1",
+  "roi_config": "config/roi_calv2.json",
+  "base_manifest": "manifests/capture_manifest_50_reviewed.csv",
+  "validation_manifest": "manifests/capture_manifest_s04_val.csv",
+  "base_test_capture_ids": [
+    "a009",
+    "a010",
+    "a014",
+    "a034",
+    "a038",
+    "a039",
+    "a041",
+    "a045",
+    "a046",
+    "a047"
+  ],
+  "validation_capture_ids": [
+    "a071",
+    "a072",
+    "a073",
+    "a074",
+    "a075",
+    "a076",
+    "a077",
+    "a078",
+    "a079",
+    "a080"
+  ],
+  "split_policy": "All non-test base captures are train; s04 captures are validation",
+  "augmentation_seed": 20260801,
+  "train_augmentations_per_roi": 4,
+  "augmentation_policy": {
+    "spatial_transforms": false,
+    "validation_augmentation": false,
+    "test_augmentation": false,
+    "dark_brightness_range": [0.65, 0.85],
+    "bright_brightness_range": [1.1, 1.3],
+    "contrast_range": [0.85, 1.15],
+    "gamma_range": [0.75, 1.35],
+    "side_shadow_min_range": [0.5, 0.75],
+    "jpeg_quality_range": [60, 90]
+  }
+}

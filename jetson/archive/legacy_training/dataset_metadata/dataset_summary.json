@@ -1,0 +1,16 @@
+{
+  "augmentation_seed": 20260801,
+  "dataset_id": "rack_roi_dataset_v1",
+  "frame_counts": {
+    "test": 10,
+    "train": 40,
+    "validation": 10
+  },
+  "roi_calibration_id": "calv2",
+  "sample_counts": {
+    "test": 90,
+    "train": 1800,
+    "validation": 90
+  },
+  "total_samples": 1980
+}

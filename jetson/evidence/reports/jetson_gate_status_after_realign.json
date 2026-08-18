@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-08-01T06:51:32Z",
+  "run_id": "20260801T060414Z_c37b859a",
+  "status": "VISION_STACK_READY_FOR_UART_INTEGRATION",
+  "vision_gate_passed": true,
+  "deployment_authorized": false,
+  "field_test_passed": false,
+  "held_out_test_reopened": false,
+  "source_onnx": {
+    "sha256": "61734686ea049434d393d424933581cd875d6478ca6fc3c1bca91d19e2e04c7d",
+    "integrity_verified": true
+  },
+  "tensorrt": {
+    "version": "10.3.0",
+    "precision": "FP16 enabled with FP32 input/output",
+    "engine_sha256": "59aca85080abf437d9c142bc1f14fd09c105f91390cab63b9f85ad978c851e23",
+    "engine_bytes": 4121452,
+    "engine_build_passed": true,
+    "parity_gate_passed": true,
+    "validation_samples": 90,
+    "decision_mismatches": 0,
+    "dangerous_occupied_to_empty": 0,
+    "max_abs_difference_batch9_vs_onnx": 0.00014257431030273438,
+    "allowed_backend_epsilon": 0.02,
+    "batch9_mean_ms": 8.801805399707519
+  },
+  "live_camera": {
+    "single_frame_passed": true,
+    "temporal_filter_passed": true,
+    "window_size": 5,
+    "minimum_matching_frames": 4,
+    "alignment_results": [
+      {"shift_x": -8, "shift_y": -8, "score": 0.567},
+      {"shift_x": -8, "shift_y": -8, "score": 0.576},
+      {"shift_x": -8, "shift_y": -8, "score": 0.561},
+      {"shift_x": -8, "shift_y": -8, "score": 0.563},
+      {"shift_x": -8, "shift_y": -8, "score": 0.569}
+    ],
+    "allowed_absolute_shift": 8,
+    "stable_states": {
+      "C1_L1": "EMPTY",
+      "C1_L2": "EMPTY",
+      "C1_L3": "EMPTY",
+      "C2_L1": "EMPTY",
+      "C2_L2": "EMPTY",
+      "C2_L3": "EMPTY",
+      "C3_L1": "EMPTY",
+      "C3_L2": "EMPTY",
+      "C3_L3": "EMPTY"
+    },
+    "votes_per_slot": "5 EMPTY, 0 OCCUPIED, 0 UNKNOWN",
+    "occupancy_snapshot_valid": true,
+    "mount_warning": "Alignment is exactly on the -8 pixel boundary; do not move the camera or rack."
+  },
+  "safety": {
+    "temporal_filter_logic_unit_tests_passed": true,
+    "camera_fault_to_unknown_validated": true,
+    "camera_fault_command_blocking_validated": true,
+    "command_authorized": false,
+    "command_block_reason": "NO_VALIDATED_JOB_OR_STM32_LINK",
+    "stm32_bytes_sent": 0
+  },
+  "remaining_gates": [
+    "FPGA UART packet receive and CRC validation",
+    "configuration-driven shape-to-column mapping",
+    "slot and pose selection with a valid job",
+    "STM32 CRC/ACK/DONE/FAULT/heartbeat/timeout behavior",
+    "post-placement occupancy-change confirmation",
+    "field test and long-duration camera test"
+  ],
+  "evidence_sha256": {
+    "tensorrt_parity_report.json": "b3ec1da1bac5e9f18e2d581a9363bebe7e10e502f28768af7e9a57019da01ff7",
+    "single_frame_report.json": "a410ab24acc04d4380808a5cb6a03730d7dc8c3e7714071171837aa914bf90cb",
+    "temporal_filter_report.json": "8009420c26689d5ced0352fbb5f6a0ede909c969459d6aa2b39c46e137cf2cf6",
+    "live_single_frame_log": "50319c88ea89fe7d4cf2450e3ff1106d71e30a1b30745c0a9682b841bb43d524",
+    "live_temporal_filter_log": "b2c37eee7923868edfbe935a3923faeb01bd316d046f2292771c61898a2da56a",
+    "rack_safety_gate_tests.log": "8b1408554cedd8b941dfb06f2cf0ea6d5eba76ff4a81c6fe7bdd718386ccae59"
+  }
+}

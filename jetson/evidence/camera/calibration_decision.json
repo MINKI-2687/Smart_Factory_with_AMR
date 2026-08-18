@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "status": "REJECT_EXPOSURE_REDUCTION_USE_TRAINING_TIME_CONTROLS",
+  "scope": "current live scene; held-out test was not reopened",
+  "decision": {
+    "inference_camera_controls": "config/camera_c270_live.json",
+    "preserve_training_time_auto_exposure": true,
+    "browser_preview_brightness": 0.82,
+    "inference_uses_original_brightness": true,
+    "pose_guard_change": "lighting-robust yellow-green divider mask",
+    "deployment_authorized": false,
+    "stm32_bytes_sent": 0
+  },
+  "evidence": {
+    "original_auto_frame": "00_auto_baseline.jpg",
+    "original_auto_report": "auto_baseline_inference_report.json",
+    "original_auto_key_results": {
+      "C2_L2": {"decision": "OCCUPIED", "p_occupied": 1.0},
+      "C2_L3": {"decision": "UNKNOWN", "p_occupied": 0.281982421875}
+    },
+    "reduced_exposure_frame": "final_selected_auto_backlight0_brightness128.jpg",
+    "reduced_exposure_report": "final_selected_inference_report.json",
+    "reduced_exposure_key_results": {
+      "C2_L2": {"decision": "EMPTY", "p_occupied": 0.000002086162567138672},
+      "C2_L3": {"decision": "EMPTY", "p_occupied": 0.000003993511199951172}
+    }
+  },
+  "safety_reason": "The exposure-reduced frame changed visible obstruction predictions to dangerous EMPTY decisions. Actual exposure reduction is therefore rejected for this model."
+}

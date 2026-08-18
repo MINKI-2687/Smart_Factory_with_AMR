@@ -1,0 +1,20 @@
+{
+  "calibration_id": "calv2",
+  "status": "recorded_s01_only",
+  "reference_frame": "raw/s01_train/c270_calv1_s01_l00_a001.jpg",
+  "live_alignment_required": true,
+  "frame_width": 1280,
+  "frame_height": 720,
+  "coordinate_format": "x0_y0_x1_y1_exclusive",
+  "slots": {
+    "C1_L3": [250, 45, 508, 224],
+    "C2_L3": [545, 45, 795, 224],
+    "C3_L3": [845, 45, 1100, 224],
+    "C1_L2": [250, 265, 508, 447],
+    "C2_L2": [545, 265, 795, 447],
+    "C3_L2": [845, 265, 1100, 447],
+    "C1_L1": [250, 480, 505, 665],
+    "C2_L1": [545, 480, 795, 665],
+    "C3_L1": [845, 480, 1100, 665]
+  }
+}

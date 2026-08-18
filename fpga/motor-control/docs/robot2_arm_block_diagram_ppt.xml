@@ -1,0 +1,199 @@
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="720" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ===== 타이틀 영역 ===== -->
+    <mxCell id="title_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a237e;strokeColor=none;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="20" y="10" width="1240" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="title_text" value="&lt;b style=&quot;font-size: 16px; color: #ffffff;&quot;&gt;OpenRB-150 &amp;amp; OMX-F 6축 로봇팔 2 — 시스템 아키텍처 블록 다이어그램&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10.5px; color: #c5cae9;&quot;&gt;Firmware R2-PICK-HEIGHT-J3-RAISE120-V28 | Jetson 9-Byte UART | 8-Point Tri-Mesh IK | 3x3 Storage Shelf Placement&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1" parent="1">
+      <mxGeometry x="30" y="11" width="1220" height="38" as="geometry" />
+    </mxCell>
+
+    <!-- ========================================================== -->
+    <!-- ===== 1. ROW 1: SYSTEM PIPELINE (Y: 60 ~ 175) ===== -->
+    <!-- ========================================================== -->
+
+    <!-- [1.1] HOST COMPUTER: JETSON -->
+    <mxCell id="grp_jetson" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#f57c00;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="20" y="60" width="230" height="115" as="geometry" />
+    </mxCell>
+    <mxCell id="title_jetson" value="&lt;b style=&quot;font-size: 11px; color: #e65100;&quot;&gt;Host Computer (Jetson)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1" parent="1">
+      <mxGeometry x="30" y="62" width="210" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="node_cam" value="&lt;b style=&quot;font-size: 9.5px;&quot;&gt;Pcam 비전 시스템&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;1920x1080 Top-Down View&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#fb8c00;fontColor=#bf360c;" vertex="1" parent="1">
+      <mxGeometry x="28" y="82" width="214" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="node_jetson_logic" value="&lt;b style=&quot;font-size: 9.5px;&quot;&gt;목표 좌표 &amp;amp; 슬롯 생성&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;상자 (X, Y) 픽셀 &amp;amp; 슬롯 (1~9)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#fb8c00;fontColor=#bf360c;" vertex="1" parent="1">
+      <mxGeometry x="28" y="128" width="214" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- [1.2] UART PROTOCOL -->
+    <mxCell id="grp_protocol" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="270" y="60" width="270" height="115" as="geometry" />
+    </mxCell>
+    <mxCell id="title_protocol" value="&lt;b style=&quot;font-size: 11px; color: #4a148c;&quot;&gt;UART 통신 프로토콜 (115200 bps)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1" parent="1">
+      <mxGeometry x="280" y="62" width="250" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="node_pkt_tx" value="&lt;b style=&quot;font-size: 9.5px;&quot;&gt;Jetson → OpenRB 명령 (9 Bytes)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8px;&quot;&gt;[0xAA][0x55][Cmd ID][Slot 1~9][X_H][X_L][Y_H][Y_L][CRC8]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#8e24aa;fontColor=#4a148c;" vertex="1" parent="1">
+      <mxGeometry x="278" y="82" width="254" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="node_pkt_rx" value="&lt;b style=&quot;font-size: 9.5px;&quot;&gt;OpenRB → Jetson 응답 (5 Bytes)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8px;&quot;&gt;[0xAA][0x55][Cmd ID][Status: ACK/DONE/NAK][CRC8]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#8e24aa;fontColor=#4a148c;" vertex="1" parent="1">
+      <mxGeometry x="278" y="128" width="254" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- [1.3] MAIN CONTROLLER: OPENRB-150 -->
+    <mxCell id="grp_mcu" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#0288d1;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="560" y="60" width="430" height="115" as="geometry" />
+    </mxCell>
+    <mxCell id="title_mcu" value="&lt;b style=&quot;font-size: 11px; color: #01579b;&quot;&gt;메인 제어기: OpenRB-150 Firmware Core&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1" parent="1">
+      <mxGeometry x="570" y="62" width="410" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="node_mcu_uart" value="&lt;b style=&quot;font-size: 9px;&quot;&gt;Serial3 패킷 파서&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8px;&quot;&gt;D13(RX)/D14(TX)&lt;br&gt;CRC8 검증 &amp;amp; ACK&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#039be5;fontColor=#01579b;" vertex="1" parent="1">
+      <mxGeometry x="568" y="82" width="130" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="node_mcu_fsm" value="&lt;b style=&quot;font-size: 9px;&quot;&gt;태스크 상태 머신 (FSM)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8px;&quot;&gt;INIT → PICK_PREP → PICK&lt;br&gt;→ LIFT → PLACE → HOME&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#039be5;fontColor=#01579b;" vertex="1" parent="1">
+      <mxGeometry x="708" y="82" width="138" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="node_mcu_settle" value="&lt;b style=&quot;font-size: 9px;&quot;&gt;안정화 감지 엔진&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8px;&quot;&gt;waitForArmTol()&lt;br&gt;4회 연속 안정화 검증&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#039be5;fontColor=#01579b;" vertex="1" parent="1">
+      <mxGeometry x="856" y="82" width="126" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="node_mcu_profiles" value="&lt;b style=&quot;font-size: 9px;&quot;&gt;동적 모션 프로파일 제어기&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8px;&quot;&gt;MOVE (45/15) | SLOW (15) | PLACE (12/5) | HEIGHT (20/8) | GRIP (40/15)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81d4fa;strokeColor=#0288d1;fontColor=#01579b;" vertex="1" parent="1">
+      <mxGeometry x="568" y="128" width="414" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- [1.4] DYNAMIXEL BUS -->
+    <mxCell id="grp_dxl_bus" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbe9e7;strokeColor=#d84315;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+      <mxGeometry x="1010" y="60" width="250" height="115" as="geometry" />
+    </mxCell>
+    <mxCell id="title_dxl_bus" value="&lt;b style=&quot;font-size: 11px; color: #bf360c;&quot;&gt;Dynamixel TTL 버스&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1" parent="1">
+      <mxGeometry x="1020" y="62" width="230" height="18" as="geometry" />
+    </mxCell>
+    <mxCell id="node_dxl_driver" value="&lt;b style=&quot;font-size: 9.5px;&quot;&gt;Dynamixel2Arduino 라이브러리&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;Serial1 TTL 버스 (1 Mbps)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffccbc;strokeColor=#f4511e;fontColor=#bf360c;" vertex="1" parent="1">
+      <mxGeometry x="1018" y="82" width="234" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="node_dxl_cmd" value="&lt;b style=&quot;font-size: 9.5px;&quot;&gt;동기 제어 명령 (Sync Control)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;Goal Position / Profile Speed &amp;amp; Accel&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffab91;strokeColor=#d84315;fontColor=#bf360c;" vertex="1" parent="1">
+      <mxGeometry x="1018" y="128" width="234" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- Pipeline Connectors -->
+    <mxCell id="e_jetson_proto" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#f57c00;strokeWidth=2;" edge="1" source="node_jetson_logic" target="node_pkt_tx" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_proto_mcu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#7b1fa2;strokeWidth=2;" edge="1" source="node_pkt_tx" target="node_mcu_uart" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_mcu_dxl" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#0288d1;strokeWidth=2;" edge="1" source="node_mcu_profiles" target="node_dxl_driver" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ========================================================== -->
+    <!-- ===== 2. ROW 2: 3 CORE SUBSYSTEM PILLARS (Y: 188 ~ 705) ===== -->
+    <!-- ========================================================== -->
+
+    <!-- [PILLAR 1] KINEMATICS & CALIBRATION -->
+    <mxCell id="grp_kinematics" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2f1;strokeColor=#00796b;strokeWidth=2;arcSize=6;" vertex="1" parent="1">
+      <mxGeometry x="20" y="188" width="400" height="515" as="geometry" />
+    </mxCell>
+    <mxCell id="title_kinematics" value="&lt;b style=&quot;font-size: 12px; color: #004d40;&quot;&gt;1. 비전 좌표 변환 &amp;amp; 역기구학 (Kinematics)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1" parent="1">
+      <mxGeometry x="30" y="192" width="380" height="20" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_kin_omx" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;OMX-F 링크 구조 파라미터&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• L1 = 77mm (베이스 높이) &amp;nbsp;|&amp;nbsp; L2 = 128mm (상완)&lt;br&gt;• L3 = 124mm (전완) &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;|&amp;nbsp; L4 = 126mm (손목~그리퍼)&lt;br&gt;• XM430 Resolution: 4096 ticks / 360° (0.088°/tick)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b2dfdb;strokeColor=#00897b;fontColor=#004d40;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="30" y="216" width="380" height="76" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_kin_fixed" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;고정 집기 자세 (USE_FIXED_PICK_POSE)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• 고정 자세: {J1:3020, J2:2500, J3:1395, J4:3210, J5:1882}&lt;br&gt;• J3 높이 상향 (1395tick): 간섭 최소화 집기 높이 확보&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b2dfdb;strokeColor=#00897b;fontColor=#004d40;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="30" y="302" width="380" height="66" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_kin_mesh" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;8점 삼각형 메쉬 보간 (Tri-Mesh IK)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• 외곽 7개 실측점 + 중심점 (542, 513) 삼각 보간&lt;br&gt;• 무게중심 좌표계 (Barycentric) 기준 관절 Pose 계산&lt;br&gt;• J5 (Wrist Roll) = 2048 중립 고정 (회전 튐 방지)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#80cbd4;strokeColor=#00796b;fontColor=#004d40;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="30" y="378" width="380" height="78" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_kin_cam_matrix" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;카메라-로봇 좌표 변환 (2x2 Matrix)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• CAM_TO_ROBOT Matrix: [[ 0.5, 0.0 ], [ 0.0, -0.5 ]]&lt;br&gt;• Full HD (1920x1080) 픽셀 Delta → 로봇 XY(mm) 변환&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b2dfdb;strokeColor=#00897b;fontColor=#004d40;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="30" y="466" width="380" height="66" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_kin_local_lift" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;국소 바닥 충돌 방지 &amp;amp; Multi-Z 접근&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• (618, 791)px 영역 바닥 감지 보정: +40tick Lift&lt;br&gt;• 접근 Z 높이: PICK_Z (30mm) / MID (60mm) / HIGH (90mm)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b2dfdb;strokeColor=#00897b;fontColor=#004d40;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="30" y="542" width="380" height="66" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_kin_home_pose" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;기준 자세 &amp;amp; 이동 자세 (Home Presets)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• POSE_INIT / HOME: {2048, 747, 3079, 3194, 2023}&lt;br&gt;• POSE_AFTER_HOME: {2021, 1708, 2065, 3196, 2027}&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b2dfdb;strokeColor=#00897b;fontColor=#004d40;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="30" y="618" width="380" height="74" as="geometry" />
+    </mxCell>
+
+
+    <!-- [PILLAR 2] MOTION PLANNING & SETTLE -->
+    <mxCell id="grp_motion" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;strokeWidth=2;arcSize=6;" vertex="1" parent="1">
+      <mxGeometry x="440" y="188" width="400" height="515" as="geometry" />
+    </mxCell>
+    <mxCell id="title_motion" value="&lt;b style=&quot;font-size: 12px; color: #0d47a1;&quot;&gt;2. 모션 플래닝 &amp;amp; 정밀 제어 (Motion &amp;amp; Settle)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1" parent="1">
+      <mxGeometry x="450" y="192" width="380" height="20" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_mot_smooth" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;다단계 관절 보간 (moveSmoothAndWait)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• 대형 관절 이동 분할 (N-Step Linear Interpolation)&lt;br&gt;• 관절 이동량 차이로 인한 팔 튐 / 휘어짐 현상 제거&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1e88e5;fontColor=#0d47a1;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="216" width="380" height="66" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_mot_profiles_detail" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;동적 속도/가속도 프로파일 (Profile Matrix)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• 일반 이동 (MOVE): Speed = 45, Accel = 15&lt;br&gt;• 수납 적재 (PLACE): Speed = 12, Accel = 5 (최저속 진입)&lt;br&gt;• 높이 설정 (HEIGHT): Speed = 20, Accel = 8&lt;br&gt;• 그리퍼 구동 (GRIP): Speed = 40, Accel = 15&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1e88e5;fontColor=#0d47a1;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="292" width="380" height="84" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_mot_settle_detail" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;연속 안정화 도달 감지 (Settle Engine)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• SETTLE_STABLE_COUNT = 4회 연속 허용치 만족 시 통과&lt;br&gt;• 순간 허용치 진입으로 인한 오작동 방지 (~80ms 안정화)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#90caf9;strokeColor=#1565c0;fontColor=#0d47a1;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="386" width="380" height="66" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_mot_tol_matrix" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;다단계 관절 허용치 (Tolerance Matrix)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• 일반 이동: {20, 60, 60, 90, 20} tick&lt;br&gt;• 적재 정밀: PLACE_TOLERANCE = {12, 40, 40, 45, 12} tick&lt;br&gt;• 수평 유지: HORIZONTAL_TOLERANCE = {12, 40, 40, 50, 20} tick&lt;br&gt;• 경유점: WAYPOINT_TOLERANCE = {60, 100, 100, 60, 60} tick&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1e88e5;fontColor=#0d47a1;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="462" width="380" height="84" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_mot_comp" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;손목 하중 보상 &amp;amp; 진동 감쇠&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• J4 손목 하중 보상: J4_HORIZONTAL_LOAD_COMP = 90tick&lt;br&gt;• 진동 감쇠 대기 (serviceDelay): 정지 후 residual 진동 감쇠&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbdefb;strokeColor=#1e88e5;fontColor=#0d47a1;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="556" width="380" height="66" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_mot_timeouts" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;안전 타임아웃 protection&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• ARM_MOVE_TIMEOUT: 10000ms | PLACE_TIMEOUT: 20000ms&lt;br&gt;• 7번 슬롯 천장 이탈 타임아웃: SLOT7_WITHDRAW = 35000ms&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#90caf9;strokeColor=#1565c0;fontColor=#0d47a1;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="632" width="380" height="60" as="geometry" />
+    </mxCell>
+
+
+    <!-- [PILLAR 3] ACTUATORS & SHELF MATRIX -->
+    <mxCell id="grp_actuators" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;strokeWidth=2;arcSize=6;" vertex="1" parent="1">
+      <mxGeometry x="860" y="188" width="400" height="515" as="geometry" />
+    </mxCell>
+    <mxCell id="title_actuators" value="&lt;b style=&quot;font-size: 12px; color: #1b5e20;&quot;&gt;3. 6축 서보 &amp;amp; 3x3 적재 선반 (Actuators &amp;amp; Shelf)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1" parent="1">
+      <mxGeometry x="870" y="192" width="380" height="20" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_act_servos" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;6x Dynamixel XM430-W350 구동부&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• ID 11 (J1): Base 회전 &amp;nbsp;&amp;nbsp;&amp;nbsp;|&amp;nbsp; ID 12 (J2): Shoulder 관절&lt;br&gt;• ID 13 (J3): Elbow 관절 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;|&amp;nbsp; ID 14 (J4): Wrist Pitch 관절&lt;br&gt;• ID 15 (J5): Wrist Roll 관절 | ID 16 (GRIP): 파지 그리퍼&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontColor=#1b5e20;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="870" y="216" width="380" height="76" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_act_shelf_matrix" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;3x3 수납함 적재 매트릭스 (Slots 1~9)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;┌─────────────┬─────────────┬─────────────┐&lt;br&gt;│ &lt;b&gt;Slot 7&lt;/b&gt; (Top L) │ &lt;b&gt;Slot 8&lt;/b&gt; (Top C) │ &lt;b&gt;Slot 9&lt;/b&gt; (Top R) │ &lt;b style=&quot;color:#2e7d32;&quot;&gt;위층&lt;/b&gt;&lt;br&gt;├─────────────┼─────────────┼─────────────┤&lt;br&gt;│ &lt;b&gt;Slot 4&lt;/b&gt; (Mid L) │ &lt;b&gt;Slot 5&lt;/b&gt; (Mid C) │ &lt;b&gt;Slot 6&lt;/b&gt; (Mid R) │ &lt;b style=&quot;color:#2e7d32;&quot;&gt;가운데층&lt;/b&gt;&lt;br&gt;├─────────────┼─────────────┼─────────────┤&lt;br&gt;│ &lt;b&gt;Slot 1&lt;/b&gt; (Bot L) │ &lt;b&gt;Slot 2&lt;/b&gt; (Bot C) │ &lt;b&gt;Slot 3&lt;/b&gt; (Bot R) │ &lt;b style=&quot;color:#2e7d32;&quot;&gt;아래층&lt;/b&gt;&lt;br&gt;└─────────────┴─────────────┴─────────────┘&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#2e7d32;fontColor=#1b5e20;align=center;" vertex="1" parent="1">
+      <mxGeometry x="870" y="302" width="380" height="110" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_act_slot_comp" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;슬롯별 전용 깊이 &amp;amp; 높이 보정&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• Slot 1 깊이 보정: +30tick J2/J4 오프셋&lt;br&gt;• 전 슬롯 적재 높이 상향: SLOT_PLACE_RAISE_J3 = 30tick&lt;br&gt;• 7번 슬롯 우측 우회: J1 right shift (+15tick 보정)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontColor=#1b5e20;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="870" y="422" width="380" height="74" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_act_retreat" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;천장 간섭 방지 후퇴 경로 (Retreat Path)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• 기본 후퇴 오프셋: J2 +390, J3 +390, J4 -780 tick&lt;br&gt;• 층별 천장 간섭 방지 J3 lowering Down Tick:&lt;br&gt;   - 아래층: J3 +20tick &amp;nbsp;|&amp;nbsp; 가운데층: J3 +40tick &amp;nbsp;|&amp;nbsp; 위층: J3 +80tick&lt;br&gt;• 7번 슬롯 전용 다단계 후퇴: 10~14 Steps Retry 적용&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontColor=#1b5e20;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="870" y="506" width="380" height="96" as="geometry" />
+    </mxCell>
+
+    <mxCell id="node_act_gripper_spec" value="&lt;b style=&quot;font-size: 10px;&quot;&gt;그리퍼 파지 &amp;amp; 슬롯 놓기 동작&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 8.5px;&quot;&gt;• 집기 준비 (GRIP_PICK_PREP): 2500 tick&lt;br&gt;• 실제 파지 (GRIP_CLOSE): 2056 tick (물체 파지 160tick 허용)&lt;br&gt;• 슬롯 놓기 (GRIP_PLACE_RELEASE): 2300 tick&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#2e7d32;fontColor=#1b5e20;align=left;spacingLeft=10;" vertex="1" parent="1">
+      <mxGeometry x="870" y="612" width="380" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- Subsystem Connections -->
+    <mxCell id="e_kin_mot" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#00796b;strokeWidth=2;" edge="1" source="node_kin_mesh" target="node_mot_smooth" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <mxCell id="e_mot_act" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1565c0;strokeWidth=2;" edge="1" source="node_mot_profiles_detail" target="node_act_servos" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

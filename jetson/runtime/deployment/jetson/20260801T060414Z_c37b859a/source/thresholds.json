@@ -1,0 +1,95 @@
+{
+  "code": {
+    "canonical_source_file": "training_notebook_source.py",
+    "canonical_source_sha256": "856ad28f4019a82033105b0cfe027244fc3d244198f21d84a5907da2dfa3ca7f",
+    "notebook_semantic_sha256": "0e15c2fef719ce4d01d8087d3e23128b5a1a55d96d604c632243571f0176884e",
+    "notebook_snapshot_file": "executed_notebook_snapshot.ipynb",
+    "notebook_snapshot_sha256": "026c20eec2b0144aec68c7488da51437b4c7a1a81807a7b8f31417db7f794450",
+    "release_manifest_file": "notebook_release_manifest.json",
+    "release_manifest_sha256": "3a0eb19d252b3abe8dba9bb24b1352ac4ea892cbba06f57e6d37fdb0466759f3"
+  },
+  "data": {
+    "dataset_config_sha256": "e332345873ad99e73b94440362b3985f7edb77f7545a5a4b190a26732bf98bde",
+    "dataset_id": "rack_roi_dataset_v2",
+    "dataset_summary_sha256": "5c6bab6e789b1ca59d6f21d8f076c37404a24cb862e6033f54ee4620cfa24db5",
+    "dataset_zip_sha256": "da90b2e5ed976b918f326c8332a36f09bdbe023d7d7bd5e2d08e8c629193ed09",
+    "frame_manifest_sha256": "7fa296bff82918087342c1cb5dcfd5b1a439118a2b2d774e08437cb57492678a",
+    "input_sha256_manifest_sha256": "2a2a5145e1ff55168ee1d7e820bcafcd47e768b878fa59e164f99ae91669140f",
+    "label_corrections_sha256": "fde23ecf0e061ea327a51ce0004a77d09878102ac1afbedbba03b0cfd57c7500",
+    "roi_manifest_sha256": "c0473395c445a4c6a7df3417989bd29f1848a028b4f1bd25207968bbe08c9fd6",
+    "split_consumption_sha256": "1cc5d9c06f64273def02cc61942491908373772fc718cc7d8450c89aefe97ecd",
+    "validation_capture_ids": [
+      "a071",
+      "a072",
+      "a073",
+      "a074",
+      "a075",
+      "a076",
+      "a077",
+      "a078",
+      "a079",
+      "a080"
+    ]
+  },
+  "model": {
+    "architecture": "mobilenet_v3_small",
+    "checkpoint_file": "best.pt",
+    "checkpoint_sha256": "791a597fb33eae9f95ef7f517cd53d30da2f14a8c99d61893683e00a8532884b",
+    "class_to_index": {
+      "EMPTY": 0,
+      "OCCUPIED": 1
+    },
+    "onnx_file": "rack_occupancy_mobilenetv3_small.onnx",
+    "onnx_sha256": "61734686ea049434d393d424933581cd875d6478ca6fc3c1bca91d19e2e04c7d",
+    "pooling": "spatial_mean_keepdim",
+    "score_definition": "ONNX output p_occupied"
+  },
+  "reproducibility_artifacts": {
+    "environment_sha256": "5452b2da71904850cbdbb497f1a698f165cbd5b71ae6aa1dbc0847df9af7e16f",
+    "preprocessing_sha256": "29ddc8da6a0c77377b5a66ecc40c88bd5072525ec48bf17673a35332caeae41d",
+    "training_config_sha256": "0d08e33690e98358439062f7e8eae4646d3b63f6c012033c4369c9eee5f274ac"
+  },
+  "schema_version": 1,
+  "selection": {
+    "backend_max_abs_difference": 4.2655301513150334e-10,
+    "epsilon_floor": 0.02,
+    "epsilon_total": 0.02,
+    "objective": "zero robust cross-errors, then maximum balanced action coverage",
+    "search_resolution": 0.005,
+    "source": "validation_original_only"
+  },
+  "statistical_limitation": "Each 90-ROI split comes from only 10 captured frames; ROI outcomes within a frame are correlated, so no iid safety-error-rate claim is made.",
+  "test_policy": {
+    "consumed_at_threshold_freeze": false,
+    "retuning_from_test_forbidden": true
+  },
+  "thresholds": {
+    "empty_rule": "p_occupied <= t_empty",
+    "occupied_rule": "p_occupied >= t_occupied",
+    "t_empty": 0.005,
+    "t_occupied": 0.995,
+    "unknown_rule": "t_empty < p_occupied < t_occupied"
+  },
+  "validation_frame_metrics": {
+    "cross_error_frames": 0,
+    "frames": 10,
+    "frames_with_unknown": 0,
+    "fully_correct_frames": 10,
+    "unsafe_frames": 0
+  },
+  "validation_metrics": {
+    "coverage": 1.0,
+    "empty_action_recall": 1.0,
+    "empty_to_empty": 45,
+    "empty_to_occupied": 0,
+    "empty_to_unknown": 0,
+    "known_accuracy": 1.0,
+    "n": 90,
+    "n_empty": 45,
+    "n_occupied": 45,
+    "occupied_action_recall": 1.0,
+    "occupied_to_empty": 0,
+    "occupied_to_occupied": 45,
+    "occupied_to_unknown": 0
+  }
+}

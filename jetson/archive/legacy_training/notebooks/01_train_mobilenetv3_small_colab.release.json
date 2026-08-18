@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "release_name": "rack-occupancy-mobilenetv3-small-colab-v1",
+  "dataset_zip_sha256": "e86680610423f9817d1b7509cd451db1b4316c9a89083b4212eb08cee142aa74",
+  "files": {
+    "canonical_source": {
+      "name": "01_train_mobilenetv3_small_colab.py",
+      "sha256": "a11d2ad09c34797aae0a92234b5cfba2201a9100682a745897c371755048e798"
+    },
+    "colab_notebook": {
+      "name": "01_train_mobilenetv3_small_colab.ipynb",
+      "initial_file_sha256": "f6589e4c05383a1aedd50fd1c3328d0195b06c8bb653592c6a178e1a6db4fe7e",
+      "semantic_sha256": "b58d13f9bc9a49bdc79b6301d69631b50c6617a32643145c201f12d29926c49b"
+    }
+  },
+  "relationship": "The Colab notebook was generated deterministically from the canonical percent-format Python source. The semantic hash covers ordered cell types and cell source text, but excludes execution outputs and counts."
+}
