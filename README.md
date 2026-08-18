@@ -222,21 +222,30 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 <a id="troubleshooting"></a>
 ## 🛠 트러블슈팅 및 개선 (Troubleshooting)
 
-### 1. 조명 민감도 및 도형 인식 오류 개선
+### 1. 도형 인식 오류 (Shape Detect Error)
 
-| Before (RGB 임계값 — 오인식) | After (HSV 변환 + 바운딩박스 정상 추적) |
-|:---:|:---:|
-| <img src="docs/images/fpga_hdmi_detect.gif" width="100%" alt="Before: Raw HDMI detect"> | <img src="docs/images/fpga_pcam_bbox_tracking.gif" width="100%" alt="After: Bounding Box Tracking"> |
-| **조명 변화 시 RGB 임계값 오검출** | **HSV 변환 후 안정적 도형 인식** |
+<img width="463" height="316" alt="Shape Detect Error" src="https://github.com/user-attachments/assets/4c32f343-9538-42ad-9bbf-fcdb45a80060" />
 
-- **문제점**: 주변 조명 변화에 따라 단순 RGB 임계값 방식에서 도형 오인식 및 경계 검출 실패 발생.
+- **문제점**: 면적과 픽셀 수 기법을 사용하여 Flood Fill 방식으로 도형을 검출했으나, 조명 변화 및 크기 불균형으로 `No Shape Detected` 오류 빈번 발생.
 - **해결책**:
-  - RGB ➔ **HSV 색공간 변환 및 색상 분류기** 하드웨어 RTL 구현.
-  - Fourier Harmonic Noise Filter 및 모폴로지 기법을 적용하여 조명 노이즈에 강건한 윤곽선 검출 달성.
+  - Flood Fill → **Fourier Harmonic 기법**으로 도형 판별 알고리즘 전환.
+  - RGB 임계값 → **HSV 색공간 변환** 및 하드웨어 RTL 분류기 구현으로 조명 노이즈에 강건한 검출 달성.
 
 ---
 
-### 2. 엔코더 채터링 및 신호 동기화 (Debounce Filter)
+### 2. UART LoopBack 통신 오류
+
+<img width="321" height="317" alt="UART LoopBack" src="https://github.com/user-attachments/assets/1113b1c5-cee3-4d88-9668-a4f01495a1ce" />
+
+- **문제점**: Jetson과 연결 시 FPGA(Zybo)에서 UART 신호를 받지 못하는 현상 발생.
+- **원인 분석**: Vitis BSP 설정에서 UART 포트가 **Loopback 모드**로 설정되어 있어, 외부 장치와의 송수신이 차단됨.
+- **해결책**:
+  - Vivado에서 `ps7_uart_1`의 포트 매핑을 `sdout peripheral`로 올바르게 재설정.
+  - BSP Loopback 설정 확인 후 변경 → 정상 통신 확인 (오실로스코프 파형 검증 완료).
+
+---
+
+### 3. 엔코더 채터링 및 신호 동기화 (Debounce Filter)
 
 | Before (디바운스 필터 미적용) | After (디바운스 필터 적용) |
 |:---:|:---:|
@@ -250,7 +259,8 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 
 ---
 
-### 3. 로봇팔 파지 도달 안정성 (Settle Time) 확보
+### 4. 로봇팔 파지 도달 안정성 (Settle Time) 확보
+
 - **문제점**: 관절 이동 후 목표 지점 도달 판정이 너무 빨라 잔여 진동으로 인한 파지 실패 발생.
 - **해결책**:
   - 단일 도달 판정에서 `SETTLE_STABLE_COUNT` 연속 만족 시 통과하는 안정화 딜레이 로직 도입.
