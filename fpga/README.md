@@ -2,9 +2,14 @@
 
 > **Zybo Z7-20** 보드를 활용한 2가지 하드웨어 서브시스템
 
-<p align="center">
-  <img src="../docs/images/fpga_shape_detect_demo.gif" alt="FPGA Shape Tracking Demo" width="60%">
-</p>
+---
+
+## 🎬 영상처리 시연 (Vision Pipeline Demo)
+
+| 📷 HSV 빨간색 물체 검출 (HDMI 출력) | 🔲 바운딩박스 트래킹 + 좌표 추출 |
+|:---:|:---:|
+| <img src="../docs/images/fpga_hdmi_detect.gif" width="100%" alt="FPGA HSV Color Detection"> | <img src="../docs/images/fpga_pcam_bbox_tracking.gif" width="100%" alt="FPGA Bounding Box Tracking"> |
+| **Pcam 5C → HSV 변환 → 빨간색 영역 마스킹** | **실시간 Bounding Box 좌표 패킹 → UART 전송** |
 
 ---
 

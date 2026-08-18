@@ -35,10 +35,10 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 <a id="demo"></a>
 ## 🎬 시스템 시연 (Demonstration)
 
-| 🚗 자율주행 셔틀 (AMR) | 📷 FPGA 영상처리 & 도형 인식 |
-|:---:|:---:|
-| <img src="docs/images/amr_shuttle_demo.gif" width="100%" alt="AMR Shuttle"> | <img src="docs/images/fpga_shape_detect_demo.gif" width="100%" alt="FPGA Shape Tracking"> |
-| **LiDAR SLAM 기반 주행 및 슬롯 도킹** | **Pcam 5C 기반 실시간 HSV 추적 & 도형 판별** |
+| 🚗 자율주행 셔틀 (AMR) | 📷 FPGA 빨간색 물체 검출 | 🔲 FPGA 바운딩박스 트래킹 |
+|:---:|:---:|:---:|
+| <img src="docs/images/amr_shuttle_demo.gif" width="100%" alt="AMR Shuttle"> | <img src="docs/images/fpga_hdmi_detect.gif" width="100%" alt="FPGA HSV Color Detection"> | <img src="docs/images/fpga_pcam_bbox_tracking.gif" width="100%" alt="FPGA Bounding Box Tracking"> |
+| **LiDAR SLAM 기반 주행 및 슬롯 도킹** | **Pcam 5C → HSV 변환 → 빨간색 마스킹** | **실시간 Bounding Box 좌표 추출 → UART** |
 
 | 🧠 Jetson AI 적재함 모니터링 | 🦾 로봇팔 물류 파지 및 슬롯 적재 (통합 시연) |
 |:---:|:---:|
@@ -223,9 +223,11 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 ## 🛠 트러블슈팅 및 개선 (Troubleshooting)
 
 ### 1. 조명 민감도 및 도형 인식 오류 개선
-<p align="center">
-  <img src="docs/images/troubleshoot_shape_detect_clean.png" alt="Troubleshooting Shape Detection Clean" width="70%">
-</p>
+
+| Before (RGB 임계값 — 오인식) | After (HSV 변환 + 바운딩박스 정상 추적) |
+|:---:|:---:|
+| <img src="docs/images/fpga_hdmi_detect.gif" width="100%" alt="Before: Raw HDMI detect"> | <img src="docs/images/fpga_pcam_bbox_tracking.gif" width="100%" alt="After: Bounding Box Tracking"> |
+| **조명 변화 시 RGB 임계값 오검출** | **HSV 변환 후 안정적 도형 인식** |
 
 - **문제점**: 주변 조명 변화에 따라 단순 RGB 임계값 방식에서 도형 오인식 및 경계 검출 실패 발생.
 - **해결책**:
@@ -235,9 +237,11 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 ---
 
 ### 2. 엔코더 채터링 및 신호 동기화 (Debounce Filter)
-<p align="center">
-  <img src="docs/images/troubleshoot_encoder.gif" alt="Troubleshooting Encoder Debounce" width="70%">
-</p>
+
+| Before (디바운스 필터 미적용) | After (디바운스 필터 적용) |
+|:---:|:---:|
+| <img src="docs/images/encoder_before.gif" width="100%" alt="Encoder Before"> | <img src="docs/images/encoder_after.gif" width="100%" alt="Encoder After"> |
+| **엔코더 채터링으로 주행 궤적 불안정** | **디바운스 필터 적용 후 안정적 직진/회전** |
 
 - **문제점**: 휠 엔코더 A/B 위상 신호의 바운싱 및 채터링으로 인해 위치 오차가 누적되는 현상 발생.
 - **해결책**:
