@@ -1,68 +1,35 @@
-# FPGA — 영상처리 파이프라인 & RC Car 모터 제어
+# ⚡ FPGA — 영상처리 파이프라인 & RC Car 모터 제어
 
-Zybo Z7-20 기반 FPGA 설계를 두 파트로 나누어 관리합니다.
-
----
-
-## 디렉토리 구조
-
-```
-fpga/
-├── vision-pipeline/         # Pcam 5C 영상처리 + Vitis PS + OpenRB UART
-│   ├── vivado/
-│   │   ├── block_design/    # Vivado Block Design (.bd, .xpr)
-│   │   ├── rtl/             # 사용자 RTL (HSV 추적기, SR04 가드)
-│   │   ├── constraints/     # 보드·카메라·UART·SR04 핀 제약
-│   │   └── scripts/         # 빌드·타이밍 검증 Tcl
-│   ├── vitis/               # ARM PS 애플리케이션 (main.cc)
-│   ├── arduino/             # OpenRB-150 IK·UART 코드 (.ino)
-│   ├── artifacts/           # 생성된 BIT, XSA, ELF
-│   ├── docs/                # 블록 다이어그램 (Mermaid, drawio)
-│   └── README.md
-│
-└── motor-control/           # RC Car FPGA 모터 제어 모듈
-    ├── rtl/                 # SystemVerilog RTL
-    │   ├── rc_car_top.sv    # 최상위 모듈
-    │   ├── UART.sv          # UART 통신
-    │   ├── cmd_rx.sv        # 명령 수신
-    │   ├── motor_controller.sv
-    │   ├── encoder_counter.sv
-    │   ├── encoder_tx.sv    # 엔코더 데이터 송신
-    │   └── watchdog.sv      # 와치독 타이머
-    ├── constraints/
-    │   └── rc_car.xdc       # FPGA 핀 매핑
-    ├── sim/                 # 테스트벤치
-    │   ├── tb_rc_car_top.sv
-    │   ├── tb_uart.sv
-    │   ├── tb_motor_controller.sv
-    │   ├── tb_motor_and_encoder.sv
-    │   └── tb_encoder_counter.sv
-    └── docs/                # 블록 다이어그램 XML (프레젠테이션용)
-```
+> **Zybo Z7-20** 보드를 활용한 2가지 하드웨어 서브시스템
 
 ---
 
-## vision-pipeline
+## 📂 서브모듈 안내
 
-Pcam 5C → MIPI D-PHY → BayerToRGB → Gamma → VDMA → HSV 물체 추적 → HDMI 출력.
-추적기가 안정 좌표를 `coord_word`로 AXI GPIO에 노출하면, Vitis PS(ARM)가 읽어
-UART TARGET 패킷으로 Jetson/OpenRB에 전송합니다.
+| 서브모듈 | 역할 | 주요 기술 | 상세 링크 |
+|---|---|---|:---:|
+| **`vision-pipeline/`** | Pcam 5C 기반 물체 인식 및 좌표 추적 | AXI4-Stream, HSV Classifier, Vitis PS (ARM) | [바로가기 ➔](vision-pipeline/README.md) |
+| **`motor-control/`** | RC Car 모터 구동 및 엔코더 오도메트리 | PWM Controller, Quadrature Decoder, UART | 아래 내용 참조 |
 
-자세한 내용은 [vision-pipeline/README.md](vision-pipeline/README.md) 참조.
+---
 
-## motor-control
+## 🚗 Motor Control (`motor-control/`)
 
-라즈베리파이 ↔ FPGA 간 UART 명령으로 RC Car 모터를 제어합니다.
-엔코더 피드백을 읽어 오도메트리 데이터를 호스트에 반환합니다.
+라즈베리파이 주행 제어기와 UART로 통신하며 양쪽 바퀴 모터를 구동하고 휠 엔코더를 계측합니다.
 
-### 모듈 요약
+### 📁 디렉토리 구조
+- `rtl/`: SystemVerilog RTL 소스 (최상위: `rc_car_top.sv`)
+- `constraints/`: 보드 핀 제약 파일 (`rc_car.xdc`)
+- `sim/`: ModelSim/Vivado 시뮬레이션용 테스트벤치 5종
+- `docs/`: 하드웨어 블록 다이어그램
 
-| 모듈 | 설명 |
+### 🧩 RTL 모듈 요약
+| 모듈명 | 주요 기능 |
 |---|---|
-| `rc_car_top` | 최상위. UART RX/TX, 모터 2개, 엔코더 2개 연결 |
-| `UART` | 115200 8-N-1 송수신기 |
-| `cmd_rx` | 수신 바이트 → 명령 파싱 (좌/우 모터 속도·방향) |
-| `motor_controller` | PWM 생성 + 방향 제어 |
-| `encoder_counter` | A/B 상 엔코더 카운터 |
-| `encoder_tx` | 엔코더 값 패킹 → UART 송신 |
-| `watchdog` | 명령 타임아웃 시 모터 정지 |
+| `rc_car_top` | 모터 제어 탑 모듈 (UART, 모터, 엔코더 통합) |
+| `UART` | 115200bps 8-N-1 시리얼 송수신기 |
+| `cmd_rx` | 속도 및 방향 명령 패킷 디코더 |
+| `motor_controller` | PWM 신호 생성 및 모터 드라이버 방향 제어 |
+| `encoder_counter` | A/B 직교 위상 엔코더 펄스 카운터 |
+| `encoder_tx` | 엔코더 펄스 데이터 UART 송신 인코더 |
+| `watchdog` | 통신 단절 시 모터 자동 차단 안전 타이머 |

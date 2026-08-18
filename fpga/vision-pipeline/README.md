@@ -1,68 +1,46 @@
-# BLOCK DIAGRAM CODE
+# 📷 FPGA Vision Pipeline — 영상처리 & 물체 좌표 추적
 
-## Snapshot (2026-08-12)
+> **Zybo Z7-20 (Zynq-7000)** 기반의 실시간 하드웨어 영상처리 및 Zynq PS 제어 파이프라인  
+> Pcam 5C 카메라 영상 입력 → HSV 색상/도형 인식 → HDMI 출력 및 UART 좌표 전송을 수행합니다.
 
-이 묶음은 2026-08-11에 수정한 최신 Vitis 및 OpenRB 코드를 포함한다.
+---
 
-- Vitis: OpenRB의 `RETRY` 패킷(타입 `0x03`) 수신 후 새로운 좌표 선택 및 TARGET 재전송
-- OpenRB: 그리퍼 해제 실패 복구, 안전 HOME 복귀, HOME에서 RETRY 반복 송신
-- ELF: 위 Vitis 소스로 2026-08-11에 다시 빌드한 실행 파일
-- Vivado RTL/BIT/XSA: 변경 없음(기존 HSV, 좌표 추적, SR04 하드웨어 유지)
+## 🔄 비전 데이터 파이프라인
 
-`docs/`의 기존 그림은 이전 배치 참고용이다. 새 블록 다이어그램에는
-OpenRB에서 Vitis로 돌아가는 `RETRY [AA 55 03 Seq CRC8]` 경로를 추가해야 한다.
+```text
+[Pcam 5C (MIPI CSI-2)]
+         │
+         ▼
+[Digilent MIPI D-PHY / CSI-2 RX] ──> [AXI Bayer to RGB] ──> [AXI Gamma]
+                                                                  │
+                                                                  ▼
+[HDMI 디스플레이 출력] <── [AXI4-Stream / Video Out] <── [HSV Blue Tracker (Custom RTL)]
+                                                                  │ (추적 좌표 패킹)
+                                                                  ▼
+[Jetson / OpenRB] <── [UART TARGET 패킷 전송] <── [Vitis PS (ARM Cortex-A9)]
+```
 
-이 폴더는 현재 사용하는 Zybo Z7-20, Pcam 5C, HSV 물체 추적,
-SR04, Vitis UART, OpenRB-150 코드를 블록 다이어그램 작성용으로
-정리한 복사본이다. 원본 프로젝트는 변경하지 않는다.
+---
 
-## Folder Structure
+## 📂 디렉토리 구성
 
-- `artifacts/`: 실제 생성된 BIT, XSA, ELF 실행 산출물
-- `vivado/block_design/`: Vivado Block Design과 프로젝트 파일
-- `vivado/rtl/`: 현재 사용하는 사용자 RTL과 HSV 테스트벤치
-- `vivado/constraints/`: 보드, 카메라, UART, SR04 핀 제약
-- `vivado/scripts/`: HSV 빌드 및 타이밍 확인 Tcl
-- `vitis/`: PS에서 실행되는 Vitis 애플리케이션 소스
-- `arduino/`: OpenRB-150 IK, UART, Pick-and-Place 코드
-- `docs/BLOCK_DIAGRAM.mmd`: Mermaid 블록 다이어그램 코드
+| 폴더 | 설명 |
+|---|---|
+| `vivado/block_design/` | Vivado Block Design (`system.bd`, `hw.xpr`) |
+| `vivado/rtl/` | 커스텀 영상처리 RTL (`basic_axis_blue_tracker_1080.sv`, HSV 분류기 등) |
+| `vivado/constraints/` | Zybo Z7 보드, Pcam, HDMI, UART 핀 제약 (`.xdc`) |
+| `vivado/scripts/` | Vivado 합성 및 타이밍 검증 자동화 Tcl 스크립트 |
+| `vitis/` | Zynq PS ARM 프로세서 실행 소스 (`main.cc`) |
+| `artifacts/` | 미리 생성된 하드웨어 산출물 (`.bit`, `.xsa`, `.elf`) |
+| `docs/` | 시스템 블록 다이어그램 (Mermaid, Draw.io) |
 
-## Read These Files First
+---
 
-1. `docs/BLOCK_DIAGRAM.mmd`
-2. `vivado/block_design/system.bd`
-3. `vivado/rtl/basic_pcam_1080_axis.v`
-4. `vivado/rtl/basic_axis_blue_tracker_1080.sv`
-5. `vivado/rtl/basic_rgb_hsv_blue_classifier.sv`
-6. `vivado/rtl/basic_sr04_guard_wrapper.v`
-7. `vivado/rtl/basic_sr04_guard.sv`
-8. `vitis/main.cc`
-9. `arduino/omx_ik_area_test.ino`
+## 🧩 주요 RTL 모듈
 
-## Block Types
-
-- Xilinx IP: Processing System 7, AXI VDMA, AXI GPIO,
-  Video Timing Controller, AXI4-Stream to Video Out, clocks and resets.
-- Digilent IP: MIPI D-PHY RX, MIPI CSI-2 RX, AXI BayerToRGB,
-  AXI Gamma Correction, rgb2dvi.
-- Custom RTL Module Reference: `basic_pcam_1080_axis` and
-  `basic_sr04_guard_wrapper`.
-- Nested custom RTL: the blue tracker and HSV classifier are instantiated
-  inside `basic_pcam_1080_axis`; they are not separate top-level BD blocks.
-- PS software: Vitis `main.cc`; this is software, not an FPGA IP block.
-
-## Current Data Flow
-
-Pcam -> MIPI D-PHY RX -> MIPI CSI-2 RX -> BayerToRGB -> Gamma ->
-VDMA S2MM -> DDR -> VDMA MM2S -> custom blue tracker -> HDMI.
-
-The tracker also packs stable object coordinates into `coord_word`.
-AXI GPIO exposes that word to the ARM. Vitis reads up to six objects,
-selects the smallest Y and then the smallest X, checks SW0 and SR04,
-and sends a UART TARGET packet.
-
-## Important Boundary
-
-The BIT file configures PL hardware. The ELF runs on the PS ARM processor.
-The XSA describes the hardware platform used by Vitis. Arduino behavior is
-included only to document the UART boundary and the complete system flow.
+| 모듈명 | 유형 | 역할 |
+|---|---|---|
+| `basic_pcam_1080_axis` | Custom Top | AXI4-Stream 영상 파이프라인 통합 모듈 |
+| `basic_axis_blue_tracker_1080` | Custom RTL | 영상 스트림 내 파란색 영역 Bounding Box & 중심 좌표 계산 |
+| `basic_rgb_hsv_blue_classifier` | Custom RTL | RGB → HSV 실시간 변환 및 파란색 픽셀 분류 |
+| `basic_sr04_guard_wrapper` | Custom RTL | HC-SR04 초음파 센서 거리 측정 및 비상 정지 가드 |
