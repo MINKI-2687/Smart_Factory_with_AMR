@@ -32,33 +32,37 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 
 ---
 
+<a id="demo"></a>
 ## 🎬 시스템 시연 (Demonstration)
 
 | 🚗 자율주행 셔틀 (AMR) | 📷 FPGA 영상처리 & 도형 인식 |
 |:---:|:---:|
-| ![AMR Shuttle](docs/images/amr_shuttle_demo.gif) | ![FPGA Shape Tracking](docs/images/fpga_shape_detect_demo.gif) |
+| <img src="docs/images/amr_shuttle_demo.gif" width="100%" alt="AMR Shuttle"> | <img src="docs/images/fpga_shape_detect_demo.gif" width="100%" alt="FPGA Shape Tracking"> |
 | **LiDAR SLAM 기반 주행 및 슬롯 도킹** | **Pcam 5C 기반 실시간 HSV 추적 & 도형 판별** |
 
 | 🧠 Jetson AI 적재함 모니터링 | 🦾 로봇팔 물류 파지 및 슬롯 적재 |
 |:---:|:---:|
-| ![AI Rack Monitor](docs/images/ai_rack_monitor_demo.gif) | ![Robot Arm](docs/images/robot_arm_demo.gif) |
+| <img src="docs/images/ai_rack_monitor_demo.gif" width="100%" alt="AI Rack Monitor"> | <img src="docs/images/robot_arm_demo.gif" width="100%" alt="Robot Arm"> |
 | **MobileNetV3 (TensorRT FP16) 9슬롯 모니터링** | **OpenRB-150 기반 IK 역기구학 픽앤플레이스** |
 
 ---
 
+<a id="index"></a>
 ## 📋 목차
 
-- [시스템 아키텍처](#-시스템-아키텍처)
-- [서브시스템 개요](#-서브시스템-개요)
-- [디렉토리 구조](#-디렉토리-구조)
-- [하드웨어 구성](#-하드웨어-구성)
-- [통신 프로토콜](#-통신-프로토콜)
-- [트러블슈팅 및 개선](#-트러블슈팅-및-개선)
-- [실행 방법](#-실행-방법)
-- [기술 스택](#-기술-스택)
+- [🎬 시스템 시연](#demo)
+- [🏗 시스템 아키텍처](#architecture)
+- [📦 서브시스템 개요](#subsystems)
+- [📂 디렉토리 구조](#structure)
+- [🔧 하드웨어 구성](#hardware)
+- [📡 통신 프로토콜](#protocol)
+- [🛠 트러블슈팅 및 개선](#troubleshooting)
+- [🚀 실행 방법](#getting-started)
+- [⚙️ 기술 스택](#tech-stack)
 
 ---
 
+<a id="architecture"></a>
 ## 🏗 시스템 아키텍처
 
 <p align="center">
@@ -126,6 +130,7 @@ graph TB
 
 ---
 
+<a id="subsystems"></a>
 ## 📦 서브시스템 개요
 
 ### 1. 자율주행 셔틀 (`rc_shuttle/`)
@@ -184,6 +189,7 @@ graph TB
 
 ---
 
+<a id="structure"></a>
 ## 📂 디렉토리 구조
 
 ```
@@ -220,13 +226,14 @@ graph TB
 │   └── openrb_robot_arm/
 │       └── openrb_robot_arm.ino #   좌표 수신 → IK → 집기/적재
 │
-└── docs/                        # 프로젝트 문서 & 발표 자료
+└── docs/                        # 프로젝트 문서 & 시연 자료
     ├── Smart_Factory_with_AMR.pptx  # 팀 프로젝트 발표 PPT
     └── images/                  # 시연 GIF 및 다이어그램
 ```
 
 ---
 
+<a id="hardware"></a>
 ## 🔧 하드웨어 구성
 
 | 장치 | 역할 | 인터페이스 |
@@ -243,6 +250,7 @@ graph TB
 
 ---
 
+<a id="protocol"></a>
 ## 📡 통신 프로토콜
 
 <p align="center">
@@ -272,40 +280,75 @@ graph TB
 
 ---
 
+<a id="troubleshooting"></a>
 ## 🛠 트러블슈팅 및 개선 (Troubleshooting)
 
+### 1. 조명 민감도 및 도형 인식 오류 개선
 <p align="center">
   <img src="docs/images/troubleshoot_shape_detect.png" alt="Troubleshooting Shape Detection" width="85%">
 </p>
 
-1. **조명 민감도 및 도형 인식 오류 개선**
-   - 조명 변화에 취약한 단순 RGB 임계값을 **HSV 색공간 변환 및 모폴로지 필터링**으로 대체하여 인식 안정성 확보
-2. **로봇팔 도달 안정성 (Settle Time) 확보**
-   - 단일 허용 오차 통과 방식에서 `SETTLE_STABLE_COUNT` 연속 충족 방식으로 변경하여 떨림/관성으로 인한 파지 실패 방지
-3. **엔코더 오도메트리 슬립 보정**
-   - LiDAR Scan Matching 위치 보정과 엔코더 카운터 동기화를 통해 누적 슬립 오차 최소화
+- **문제점**: 주변 조명 변화에 따라 단순 RGB 임계값 방식에서 도형 오인식 및 경계 검출 실패 발생.
+- **해결책**:
+  - RGB ➔ **HSV 색공간 변환 및 색상 분류기** 하드웨어 RTL 구현.
+  - Fourier Harmonic Noise Filter 및 모폴로지 기법을 적용하여 조명 노이즈에 강건한 윤곽선 검출 달성.
 
 ---
 
+### 2. 엔코더 채터링 및 신호 동기화 (Debounce Filter)
+<p align="center">
+  <img src="docs/images/troubleshoot_encoder.gif" alt="Troubleshooting Encoder Debounce" width="70%">
+</p>
+
+- **문제점**: 휠 엔코더 A/B 위상 신호의 바운싱 및 채터링으로 인해 위치 오차가 누적되는 현상 발생.
+- **해결책**:
+  - FPGA 내 신호 동기화 **디바운스 필터(Debounce Filter)** 설계 및 적용.
+  - 휠 슬립과 펄스 튐 현상을 방지하여 안정적인 직진/회전 오도메트리 확보.
+
+---
+
+### 3. 로봇팔 파지 도달 안정성 (Settle Time) 확보
+- **문제점**: 관절 이동 후 목표 지점 도달 판정이 너무 빨라 잔여 진동으로 인한 파지 실패 발생.
+- **해결책**:
+  - 단일 도달 판정에서 `SETTLE_STABLE_COUNT` 연속 만족 시 통과하는 안정화 딜레이 로직 도입.
+  - 적재 진입 시 관절공간 선형보간 및 저속 가속도 프로파일(`PLACE_SPEED / PLACE_ACCEL`) 적용.
+
+---
+
+<a id="getting-started"></a>
 ## 🚀 실행 방법
 
 ### 1. 자율주행 셔틀 (Raspberry Pi)
 ```bash
 cd rc_shuttle/
-make          # 빌드
-make run      # 실시간 UI와 함께 실행
+make          # main_shuttle 빌드
+make run      # 실시간 live_view.py UI와 함께 실행
 ```
 
 ### 2. Jetson AI 비전 & 통합 제어 (Orin Nano)
 ```bash
 cd jetson/
 
-# Terminal 1: 비전 모니터링 & 웹 UI
+# [Terminal 1] 실시간 적재함 비전 모니터링 & 웹 UI (:8080)
 ./start_vision.sh --max-allowed-shift 24 --minimum-alignment-score 0.25
 
-# Terminal 2: 통합 디스패처
+# [Terminal 2] FPGA - OpenRB 통합 디스패처
 ./start_controller.sh --fpga-port /dev/ttyUSB1 --openrb-port /dev/ttyUSB0
 ```
+
+---
+
+<a id="tech-stack"></a>
+## ⚙️ 기술 스택 (Tech Stack)
+
+| 영역 | 기술 스택 | 설명 |
+|---|---|---|
+| **자율주행 (AMR)** | `C11`, `LiDAR SLAM`, `A* Path Planning`, `PID Control` | 2D 점유 격자 지도, 스캔매칭 위치추정, 동적 장애물 회피 |
+| **AI 비전 (Edge AI)** | `Python`, `PyTorch`, `ONNX`, `TensorRT 10.3`, `MobileNetV3` | 9개 슬롯 점유 이진분류, FP16 가속, 5프레임 다수결 안정성 게이트 |
+| **FPGA & 영상처리** | `Vivado 2024.1`, `Vitis`, `SystemVerilog`, `Verilog`, `AXI4-Stream` | MIPI CSI-2 수신, Bayer-to-RGB, 실시간 HSV 색상/도형 Bounding Box 추적 |
+| **로봇팔 제어** | `Arduino C++`, `OpenRB-150`, `Dynamixel SDK`, `Inverse Kinematics` | 3차원 좌표 역기구학 연산, 삼각 보간 보정, 부드러운 관절 보간 |
+| **시스템 통신** | `UART 115200 8-N-1`, `CRC8 (Poly 0x07)`, `XOR Checksum` | 장치 간 고신뢰성 패킷 규격, ACK/DONE/FAULT 상태 머신 |
+| **UI & 시각화** | `Matplotlib (live_view)`, `Flask HTTP (:8080 웹 모니터)` | 셔틀 실시간 궤적 렌더링, 적재함 점유 상태 웹 대시보드 |
 
 ---
 
