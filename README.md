@@ -38,65 +38,9 @@ AI 비전이 적재함 상태를 모니터링하고, 로봇팔이 물체를 집�
 ---
 
 ## 🏗 시스템 아키텍처
+<img width="2874" height="1086" alt="image" src="https://github.com/user-attachments/assets/ad4e3d0a-a30d-4bee-9f4d-1f3db6973dd1" />
 
-```mermaid
-graph TB
-    subgraph SHUTTLE["🚗 자율주행 셔틀 (Raspberry Pi)"]
-        LIDAR["RPLidar C1"]
-        SLAM["LiDAR SLAM<br/>스캔매칭 위치추정"]
-        ASTAR["A* 경로계획"]
-        PID["PID 추종"]
-        SLOT["슬롯 정렬/진입/착석"]
-    end
 
-    subgraph FPGA_VISION["📷 FPGA 영상처리 (Zybo Z7-20)"]
-        PCAM["Pcam 5C"]
-        HSV["HSV 물체 추적<br/>(도형·색상 분류)"]
-        SR04["SR04 초음파<br/>안전 가드"]
-        VITIS["Vitis PS<br/>(ARM Cortex-A9)"]
-    end
-
-    subgraph FPGA_MOTOR["⚡ FPGA 모터 제어 (Zybo Z7-20)"]
-        MOTOR_CTRL["PWM 모터 제어"]
-        ENCODER["엔코더 피드백"]
-        WATCHDOG["와치독 타이머"]
-    end
-
-    subgraph JETSON["🧠 Jetson AI (Orin Nano)"]
-        CAM["Logitech C270"]
-        TRT["MobileNetV3-Small<br/>TensorRT FP16"]
-        MONITOR["적재함 모니터링<br/>(9슬롯 EMPTY/OCCUPIED)"]
-        DISPATCH["통합 디스패치<br/>컨트롤러"]
-        WEB["웹 UI :8080"]
-    end
-
-    subgraph ARM["🦾 로봇팔 (OpenRB-150)"]
-        DXL["Dynamixel 서보"]
-        IK["역기구학(IK)<br/>좌표→관절각"]
-        GRIPPER["그리퍼<br/>집기/놓기"]
-    end
-
-    LIDAR --> SLAM --> ASTAR --> PID --> SLOT
-    PID -.->|UART| FPGA_MOTOR
-    FPGA_MOTOR -.->|엔코더 데이터| SHUTTLE
-
-    PCAM --> HSV --> VITIS
-    SR04 --> VITIS
-    VITIS -->|"UART 8B<br/>도형+좌표"| DISPATCH
-
-    CAM --> TRT --> MONITOR --> DISPATCH
-    DISPATCH -->|"UART 9B<br/>좌표+슬롯"| ARM
-    ARM -->|"UART 5B<br/>ACK/DONE"| DISPATCH
-    MONITOR --> WEB
-
-    IK --> DXL --> GRIPPER
-
-    style SHUTTLE fill:#2ecc71,color:#fff
-    style FPGA_VISION fill:#3498db,color:#fff
-    style FPGA_MOTOR fill:#e67e22,color:#fff
-    style JETSON fill:#9b59b6,color:#fff
-    style ARM fill:#e74c3c,color:#fff
-```
 
 ---
 
